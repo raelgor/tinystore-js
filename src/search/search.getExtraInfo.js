@@ -1,9 +1,8 @@
-﻿var http = require('http');
-var express = require('express');
+﻿var express = require('express');
 var server = express();
 var entries = {}
 
-module.exports = function (i) {
+global.getExtraInfo = function (i) {
 
     var d = new Date().getTime();
     log('getExtraInfo ' + i.bnid + '...');

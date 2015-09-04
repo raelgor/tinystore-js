@@ -1,8 +1,4 @@
-var log = require('./debug.log.js');
-var scrapBookMeta = require('./search.scrapBookMeta.js');
-var getExtraInfo = require('./search.getExtraInfo.js');
-
-module.exports = function (bnid) {
+global.fetchBookByBnid = function (bnid) {
 
     var server = this;
     var GOT_EXTRA_INFO;

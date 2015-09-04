@@ -1,4 +1,4 @@
-﻿module.exports = function (item) {
+﻿global.scrapAuthorByBnid = function (item) {
 
     var bnid = item.authorid;
 
