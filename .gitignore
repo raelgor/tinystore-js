@@ -1,7 +1,9 @@
 node_modules/*
-*.bat 
+*.bat
+*.pdf
 config.json
 ssl/*
 *.psd
 *.tif
 *.tgz
+daemons
