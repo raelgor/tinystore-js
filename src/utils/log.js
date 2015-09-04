@@ -1,4 +1,4 @@
-module.exports = function (str) {
+global.log = function (str) {
 
     if (!global._debug) return;
 

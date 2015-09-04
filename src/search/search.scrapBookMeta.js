@@ -1,9 +1,4 @@
-﻿var log = require('./debug.log.js');
-var alias = require('./alias.js');
-var http = require('http');
-var scrapAuthorByBnid = require('./search.scrapAuthorByBnid.js');
-
-module.exports = function (bnid) {
+﻿global.scrapBookMeta = function (bnid) {
 
     log('scrapBookMeta for ' + bnid + '...');
 

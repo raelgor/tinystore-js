@@ -1,4 +1,4 @@
-﻿module.exports = function (string) {
+﻿global.alias = function (string) {
 
     string = string || "";
 

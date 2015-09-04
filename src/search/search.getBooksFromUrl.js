@@ -1,4 +1,4 @@
-﻿module.exports = function (url, cookies) {
+﻿global.getBooksFromUrl = function (url, cookies) {
 
     log('getBooksFromUrl: ' + url);
 

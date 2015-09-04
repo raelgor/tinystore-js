@@ -1,6 +1,4 @@
-﻿var fetchBookByBnid = require('./search.fetchBookByBnid.js');
-
-module.exports = function (server) {
+﻿module.exports = function (server) {
 
     fn.call(server);
 
@@ -54,7 +52,7 @@ function fn() {
 
             if (item.categories.length) {
 
-                require('./search.cast.js').call(server, {
+                searchCast.call(server, {
 
                     query: "list::" + (typeof item.categories[0] == "string" ? item.categories[0] : item.categories[0].bnid),
                     inCategory: (typeof item.categories[0] == "string" ? item.categories[0] : item.categories[0].bnid),
@@ -90,7 +88,7 @@ function fn() {
                     baseUrl: 'https://pazari-vivliou.gr/',
                     udata: res._userData,
                     csrf: zx.newSession.call(server.auth),
-                    alias: require('./alias.js'),
+                    alias: alias,
                     price: price,
                     head: {
                         title: sres.title + " - Παζάρι Βιβλίου",
