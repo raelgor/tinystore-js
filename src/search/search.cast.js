@@ -1,11 +1,16 @@
 var CACHE_SEARCH_TIME = 1000 * 60 * 60 * 12;
 var PAGE_SIZE = 24;
-var getBooksFromUrl = require('./search.getBooksFromUrl.js');
-var addToCache = require('./cache.add.js');
+var addToCache = function (key, pool, obj) {
 
-var log = require('./debug.log.js');
+    var cacheObj = [];
 
-module.exports = function (options) {
+    log('caching ' + key + ' ...');
+
+    return pool[key] = obj;
+
+}
+
+global.searchCast = function (options) {
     
     log('search.cast ' + JSON.stringify(options) + ' ...');
 

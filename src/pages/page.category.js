@@ -1,5 +1,4 @@
 ﻿var PAGE_SIZE = 24;
-var log = require('./debug.log.js');
 
 module.exports = function (server) {
 
@@ -88,7 +87,7 @@ function fn() {
             // Find book info in order: cache || mongoCache || biblionet
             bookIDs.forEach(function (bnid) {
 
-                require('./search.fetchBookByBnid.js').call(server, bnid).then(cb, cb);
+                fetchBookByBnid.call(server, bnid).then(cb, cb);
 
             });
 
@@ -105,7 +104,7 @@ function fn() {
 
         }
 
-        require('./search.cast.js').call(server, {
+        searchCast.call(server, {
 
             query: "list::" + id ,
             inCategory: id,
@@ -139,7 +138,7 @@ function fn() {
                     baseUrl: 'https://pazari-vivliou.gr/',
                     udata: res._userData,
                     csrf: zx.newSession.call(server.auth),
-                    alias: require('./alias.js'),
+                    alias: alias,
                     price: price,
                     head: {
                         title: cat.title + " - Παζάρι Βιβλίου",
@@ -148,7 +147,7 @@ function fn() {
                         metaDescription: cat.title && cat.title.split(/[<>]/).join(''),
                         metaOgImage: "https://pazari-vivliou.gr/ogimg.jpg",
                         metaOgSite_name: "Παζάρι Βιβλίου - Το Online Βιβλιοπωλείο",
-                        metaOgUrl: "https://pazari-vivliou.gr/list/" + cat.bnid + '/' + require('./alias.js')(cat.title),
+                        metaOgUrl: "https://pazari-vivliou.gr/list/" + cat.bnid + '/' + alias(cat.title),
                         metaOgTitle: cat.title + " - Παζάρι Βιβλίου",
                         metaOgType: "website",
                         metaOgLocale: "el_GR",
@@ -156,7 +155,7 @@ function fn() {
                     },
                     pageline: {
                         curPage: pageRequested,
-                        action: "/list/" + cat.bnid + '/' + require('./alias.js')(cat.title),
+                        action: "/list/" + cat.bnid + '/' + alias(cat.title),
                         searchstring: null,
                         totalPages: parseInt(resNum / PAGE_SIZE) + (resNum % PAGE_SIZE != 0 ? 1 : 0)
                     },

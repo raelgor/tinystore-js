@@ -11,13 +11,13 @@
 			.add-to-cart(title="Προσθήκη στο καλάθι")
 			.add-to-wl(title="Προσθήκη στο wishlist")
 		.prices
-			if !val.price && !val.marketPrice
+			if !price(val) 
 				span.unavail Εξαντλήθηκε
 			else
 				.old-price
-					span=(val.price||val.marketPrice)+" "
+					span=price(val)+" "
 					if val.price
 						span &euro;
 				.final-price
-					span=price(val.price, val.marketPrice) + " "
+					span=price(val) + " "
 					span &euro;

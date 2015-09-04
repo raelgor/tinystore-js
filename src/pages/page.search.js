@@ -8,8 +8,6 @@ module.exports = function (server) {
 
 function fn() {
 
-    var getBooksFromUrl = require('./search.getBooksFromUrl.js');
-
     var server = this;
     var jadeCache = server.jadeCache;
 
@@ -35,7 +33,7 @@ function fn() {
                 baseUrl: 'https://pazari-vivliou.gr/',
                 udata: res._userData,
                 csrf: zx.newSession.call(server.auth),
-                alias: require('./alias.js'),
+                alias: alias,
                 price: price,
                 head: {
                     title: "Αποτελέσματα αναζήτησης για '" + q + "' - Παζάρι Βιβλίου",
@@ -81,7 +79,7 @@ function fn() {
             // Find book info in order: cache || mongoCache || biblionet
             bookIDs.forEach(function (bnid) {
 
-                require('./search.fetchBookByBnid.js').call(server, bnid).then(cb, cb);
+                fetchBookByBnid.call(server, bnid).then(cb, cb);
 
             });
 
@@ -95,7 +93,7 @@ function fn() {
 
         }
 
-        require('./search.cast.js').call(server, {
+        searchCast.call(server, {
 
             query: q,
             inCategory: null,

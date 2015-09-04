@@ -31,7 +31,7 @@ function fn() {
             baseUrl: 'https://pazari-vivliou.gr/',
             udata: res._userData,
             csrf: zx.newSession.call(server.auth),
-            alias: require('./alias.js'),
+            alias: alias,
             price: price,
             head: {
                 title: data[id].title + " - Παζάρι Βιβλίου",
