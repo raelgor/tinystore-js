@@ -1,0 +1,11 @@
+User-agent: *
+Allow: *
+Disallow: /cart
+Disallow: /account
+Disallow: /terms-of-service
+Disallow: /privacy-policy
+User-agent: msnbot
+Crawl-delay: 1
+
+User-agent: bingbot
+Crawl-delay: 1

@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://pazari-vivliou.gr/categories</loc>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://pazari-vivliou.gr/about</loc>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://pazari-vivliou.gr/privacy-policy</loc>
+    <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://pazari-vivliou.gr/terms-of-service</loc>
+    <changefreq>weekly</changefreq>
+  </url>
+</urlset>

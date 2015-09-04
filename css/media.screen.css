@@ -1,0 +1,196 @@
+@media screen and (max-width: 1100px){
+    
+
+    .login-status-text > div {
+    color: gray !important;
+}
+    .head {
+        height: 197px!important;
+    }
+
+    .head .rightmost-wrapper {
+        float: none;
+        display: block;
+        width: 100%;
+        background-color: rgba(255, 255, 255, 0.82);
+      background-image: url(/fcover2.jpg);
+      border-top: 1px solid gray;
+      background-size: cover;
+       background-position: 100%;
+    border-bottom: 1px solid gray;
+    }
+
+    .rightmost-wrapper > * {
+     background-color: rgba(255, 255, 255, 0.82);
+    margin-left: 40%;
+    }
+
+    .logo-wrapper {
+        margin-left: 7%;
+        margin-right: 3%;
+    }
+
+    .search-wrapper {
+        margin-left: 4%;
+        margin-right: 1%;
+    }
+
+}
+
+@media screen and (max-width: 864px){
+    
+    .head {
+        height: 256px!important;
+    }
+
+    .logo-wrapper {
+        margin-left: auto!important;
+        margin-right: auto!important;
+        float: none!important;
+        display: block!important;
+        width: 370px!important;
+        margin-bottom: 0px!important;
+    }
+
+    .search-wrapper {
+        margin-top: 0px!important;
+        margin-left: auto!important;
+        margin-right: auto!important;
+        float: none!important;
+        display: block!important;
+        width: 345px!important;
+        margin-bottom: 20px!important;
+    }
+
+}
+
+@media screen and (max-width: 376px){
+
+    /*
+    .item-price-wrapper.ws .new-price > span:first-child {
+     display:block!important;
+    }
+    .item-price-wrapper.ws .new-price, .item-price-wrapper.ws .new-price > * {
+        font-size: 18px!important;
+    
+    }
+
+    */
+
+    .author-wrapper {
+        
+    width: 90%!important;
+    margin-left: 3% !important;
+    }
+
+    h2.author-name {
+    word-wrap: break-word;
+    white-space: pre;
+}
+
+    .head .logo-wrapper {
+        text-align: center;
+        width:100%!important;
+    }
+
+    .listing-category .product {
+    margin: 1px!important;
+}
+
+    .head .logo {
+        width:70px;
+        margin-left: 10px;
+    }
+
+    .head .logo-wrapper h1 {
+        font-size: 30px;
+    }
+
+    .head .search-wrapper input {
+        width: 200px;
+    }
+
+    .head .search-wrapper {
+        width: 275px !important;
+    }
+
+}
+
+
+@media screen and (max-width: 344px) {
+    .head {
+        height: 339px!important;
+    }
+    .logo-text h1 {
+    position: relative;
+    top: -16px;
+}
+    .logo-text .fb-like {
+    position: relative;
+    top: -14px;
+}
+}
+@media screen and (max-width: 574px){
+
+    .left-content {
+        float:none!important;
+        width: inherit!important;
+    }
+
+    .item-title, .item-author, .social-wrapper {
+        margin-left: 13px!important;
+    }
+
+    .center-wrapper.credits > * {
+    float: none !important;
+    display: block !important;
+    margin-left: 10px;
+}
+
+}
+
+@media screen and (max-width: 782px){
+
+    .footer-cat {
+       vertical-align: top;
+        width: 100%!important;
+        margin: 20px 10px 20px 10% !important;
+    }
+
+    .nav .icon-home { 
+        display: none !important; 
+    }
+
+    .nav > div > * {
+        display: block !important;
+        border-top: 1px solid rgba(0, 0, 0, 0.13);
+        float: none !important;
+        margin: 0px auto !important;
+        text-indent: 0px !important;
+    }
+
+    .nav { 
+        height: auto!important; 
+    }
+
+    .cart-wrapper {
+        position: relative!important;
+        left: 0px!important;
+        text-align: center!important;
+            background-color: rgb(166, 210, 145) !important;
+    }
+
+    .listing-category {
+        text-align: center;
+        margin: 0px !important;
+    }
+
+    .sidebars {
+        display: none!important;
+    }
+
+    .listings {
+        width: 100%!important;
+    }
+
+}

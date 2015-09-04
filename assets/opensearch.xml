@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenSearchDescription xmlns="https://a9.com/-/spec/opensearch/1.1/">
+  <ShortName>Παζάρι Βιβλίου</ShortName>
+  <Description>Search Παζάρι Βιβλίου</Description>
+  <InputEncoding>UTF-8</InputEncoding>
+  <Url type="text/html" method="GET" template="https://pazari-vivliou.gr/search?q={searchTerms}"/>
+  <SearchForm>https://pazari-vivliou.gr/</SearchForm>
+</OpenSearchDescription>

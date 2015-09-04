@@ -1,0 +1,12 @@
+﻿.page-line-wrapper(method="get", action=pageline.action)
+	.right-wrapper
+		a(href=(pageline.curPage != 1) && pageline.action + "?p=" + (pageline.curPage - 1) + (pageline.searchstring ? "&q=" + pageline.searchstring : ""))
+			button(disabled=(pageline.curPage == 1), type="submit", onclick="$(this).parents('form').find('input.cur-page').val(+$(this).parents('form').find('input.cur-page').val()-1)") << Προηγούμενη
+		a(href=(pageline.curPage != pageline.totalPages) && pageline.action + "?p=" + (+pageline.curPage+1) + (pageline.searchstring ? "&q=" + pageline.searchstring : ""))
+			button(disabled=(pageline.curPage == pageline.totalPages), type="submit", onclick="$(this).parents('form').find('input.cur-page').val(+$(this).parents('form').find('input.cur-page').val()+1)") Επόμενη >>
+	span Σελίδα&nbsp;
+	input.cur-page(value=pageline.curPage, type="text", name="p", onkeyup="if(event.keyCode == 13){ (window.location.href = window.location.pathname + '?p=' + this.value); e.preventDefault(); e.stopPropagation(); }")
+	if pageline.searchstring
+		input(type="hidden", name="q", value=pageline.searchstring)
+	span &nbsp;από&nbsp;
+	b=pageline.totalPages

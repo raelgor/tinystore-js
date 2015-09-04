@@ -1,0 +1,27 @@
+﻿doctype html
+html(lang="el")
+	include head.jade
+	body
+		include main-nav.jade
+		.main-content-wrapper
+			.center-wrapper
+				include sidebars.jade
+				.listings
+					.container
+						.listing-category
+							h2.title 
+								span Αποτελέσματα αναζήτησης για "
+								b=searchTerms
+								span "
+							.total-results
+								b=resNum
+								span &nbsp;αποτελέσματα σε&nbsp;
+								b=stime
+								span &nbsp;δευτερόλεπτα
+							if resNum 
+								include pagesline.jade
+							each val in sres
+								include product.jade
+							if resNum
+								include pagesline.jade
+		include footer.jade

@@ -1,0 +1,24 @@
+﻿doctype html
+html(lang="el")
+	include head.jade
+	body
+		include main-nav.jade
+		.main-content-wrapper
+			.center-wrapper
+				include sidebars.jade
+				.listings
+					.container
+						a.banner.ws.ani04(href=carousel[0]['links-to'])
+							img.ani04(alt=carousel[0].altText, src=carousel[0].image)
+						.banner-list
+							each val in carousel
+								img.ws(alt=val.altText, src=val.image, data-links-to=val['links-to'])
+						.listing-category
+							h2.title Νέες κυκλοφορίες
+							each val in nchome
+								include product.jade
+						.listing-category
+							h2.title Σε προσφορά
+							each val in otherbooks
+								include product.jade
+		include footer.jade

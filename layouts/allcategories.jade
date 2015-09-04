@@ -1,0 +1,15 @@
+﻿doctype html
+html(lang="el")
+	include head.jade
+	body
+		include main-nav.jade
+		.main-content-wrapper
+			.center-wrapper
+				include sidebars.jade
+				.listings
+					.container
+						.listing-category
+							h2.title Όλες οι κατηγορίες
+							each val in categories
+								a.sub-cat.all-cat.ws.ani02(href="/list/"+val.bnid+"/"+alias(val.title))=val.title
+		include footer.jade

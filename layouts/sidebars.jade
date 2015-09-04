@@ -1,0 +1,29 @@
+﻿.sidebars
+	.sidebar.ws.phone-block
+		.text
+			span Για
+			b τηλεφωνικές παραγγελίες
+			span ή
+			b ερωτήσεις
+		a.phone-no(href="tel:+302610009669")
+			.icon-phone
+			b.phone 261 000 9669
+		.hours
+			span Δευτέρα - Σάββατο
+			br
+			span 9 π.μ. - 9 μ.μ.
+	.sidebar.custom-fields.ws
+		.title Προτεινόμενα
+		each val in suggested
+			a.cat(href=val['links-to'])= val.title
+	.sidebar.fb-page-wrapper.ws
+		.fb-page(data-href="https://www.facebook.com/pazarivivliougr", data-width="250", data-height="350", data-small-header="false", data-adapt-container-width="true", data-hide-cover="false", data-show-facepile="true", data-show-posts="false")
+			.fb-xfbml-parse-ignore
+				blockquote(cite="https://www.facebook.com/pazarivivliougr")
+					a(href="https://www.facebook.com/pazarivivliougr") Παζάρι Βιβλίου
+	.sidebar.categories-sidebar.ws
+		a.title Κατηγορίες
+		each val in categories
+			a.cat(href="/list/"+val.bnid+'/'+alias(val.title) )= val.title
+	.sidebar.g-plus-wrapper.ws
+		.g-page(data-width="250", data-href="//plus.google.com/u/0/103422304360495596521", data-rel="publisher")

@@ -1,0 +1,25 @@
+﻿doctype html
+html(lang="el")
+	include head.jade
+	body
+		include main-nav.jade
+		.main-content-wrapper
+			.center-wrapper
+				include sidebars.jade
+				.listings
+					.container
+						.listing-category
+							h2.title=cat.title 
+								if resNum != 0
+									span=" (" + resNum + ")"
+							if(cat.contents && cat.contents.length)
+								.total-results Υποκατηγορίες: 
+							each val in cat.contents
+								a.sub-cat.ws.ani02(href="/list/"+val.bnid+"/"+alias(val.title))=val.title
+							if sres.length 
+								include pagesline.jade
+								each val in sres
+									include product.jade
+							if sres.length
+								include pagesline.jade
+		include footer.jade

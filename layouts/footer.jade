@@ -1,0 +1,29 @@
+﻿.footer
+	.center-wrapper
+		.social-media-bottom
+			a.icon-facebook2(href="https://www.facebook.com/pazarivivliougr", target="_blank")
+			a.icon-google-plus2(href="https://plus.google.com/+PazarivivliouGrOfficial", target="_blank")
+			a.icon-twitter2(href="https://twitter.com/PazariVivliouGR", target="_blank")
+		.footer-cat
+			.title Κατηγορίες
+			each val, index in categories
+				if index < 4
+					a(href="/list/"+val.bnid+'/'+alias(val.title) )= val.title
+			a(href="/categories") Όλες οι κατηγορίες
+		.footer-cat
+			.title Προτεινόμενα
+			each val in suggested
+				a(href=val['links-to'])= val.title
+		.footer-cat
+			.title Info
+			a(href="/privacy-policy") Προσωπικά δεδομένα
+			a(href="/terms-of-service") Όροι χρήσης
+		.footer-cat
+			.title Επικοινωνία
+			a(href="/about") Η εταιρία μας
+			a(href="mailto:contact@pazari-vivliou.gr", target="_blank") contact&#64;pazari-vivliou&#46;gr
+.center-wrapper.credits
+	span &copy; 2015 Pazari Vivliou. All rights reserved.
+	span.kp 
+		a designed and developed by 
+		a(href="https://www.facebook.com/kosmas.papadatos", target="_blank") Kosmas Papadatos

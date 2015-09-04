@@ -1,0 +1,107 @@
+﻿#fb-root
+.head
+	.center-wrapper
+		a.logo-wrapper(href="/")
+			.logo
+			.logo-text 
+				h1 Παζάρι Βιβλίου
+				.fb-like(data-href="https://pazari-vivliou.gr/", data-layout="button_count", data-action="like", data-show-faces="false", data-share="true")
+				.g-plusone(data-size="medium" data-href="https://pazari-vivliou.gr/")
+		.search-wrapper(itemscope, itemtype="http://schema.org/WebSite")
+			meta(itemprop="url" content="https://pazari-vivliou.gr/")
+			meta(itemprop="name" content="Παζάρι Βιβλίου - Το Online Βιβλιοπωλείο")
+			meta(itemprop="description" content="Το μεγαλύτερο e-shop βιβλίων με τις καλύτερες τιμές!")
+			meta(itemprop="image" content="https://pazari-vivliou.gr/ogimg.jpg")
+			form(action="/search", method="get", itemprop="potentialAction", itemscope, itemtype="http://schema.org/SearchAction")
+				meta(itemprop="target", content="https://pazari-vivliou.gr/search?q={q}")
+				input.search(itemprop="query-input", placeholder="Αναζήτηση σε 185,447 βιβλία...", name="q", type="text", pattern=".{2,50}", title="2 - 50 χαρακτήρες" value=(searchTerms?searchTerms:""), required)
+				button(type="submit")
+					span.icon-search
+		.rightmost-wrapper
+			.social-buttons
+				a.icon-facebook3(href="https://www.facebook.com/pazarivivliougr", target="_blank")
+				a.icon-google-plus3(href="https://plus.google.com/+PazarivivliouGrOfficial", target="_blank")
+				a.icon-twitter3(href="https://twitter.com/PazariVivliouGR", target="_blank")
+			.user-wrapper
+				.login-status-text
+					.spinner.out
+						.bounce1
+						.bounce2
+						.bounce3
+						.bounce4
+					if udata.uuid
+						.user-name-field(title=udata.displayName || udata.email)=udata.displayName || udata.email
+						a.logout-btn(href='/api/logout') Αποσύνδεση
+					else
+						.login(onclick="promptLogin()") Σύνδεση
+						span /
+						.signup(onclick="promptRegister()") Εγγραφή
+				if udata.fbid
+					.profile-image.usr(style="background-image: url(https://graph.facebook.com/" + udata.fbid + "/picture?type=normal)")
+				else if udata.uuid
+					.profile-image.usr
+				else
+					.profile-image
+.nav
+	.center-wrapper
+		a.cart-wrapper(href="/cart")
+			.cart-text-wrapper
+				.spinner.out
+					.bounce1
+					.bounce2
+					.bounce3
+					.bounce4
+				.cart-text Το καλάθι σας είναι άδειο
+				.cart-checkout 0,00 &euro;
+			.icon-cart
+		a.icon-home.current(href="/")
+		each val in menu
+			a(href=val['links-to'] )= val.title
+.center-wrapper
+	if udata && udata.verified == 0
+		.warning 
+			span Παρακαλούμε επιβεβαιώστε το email σας 
+			b=udata.email
+			span  για να ολοκληρώσετε την εγγραφή σας.
+.fixed-windows.out
+	.f-window
+		.tab.login
+			span.tab-head Συνδεθείτε
+			span.tab-head-tagline στον λογαριασμό σας
+			.fb-login(onclick="fbLogin()")
+				span.icon-facebook3 
+				span Σύνδεση με Facebook
+			form.login-form
+				input(type="email", name="email", placeholder="Το email σας", required)
+				input(type="password", name="password", placeholder="Ο κωδικός σας", required)
+				a.forgot-password(onclick="promptFPass()") Ξέχασα τον κωδικό μου
+				#login-rc.g-recaptcha
+				.error
+				input(type="submit", value="Σύνδεση")
+			.bottom-question Δεν έχετε λογαριασμό;
+				a(onclick="promptRegister()") Εγγραφή
+		.tab.register
+			span.tab-head Δημιουργία
+			span.tab-head-tagline λογαριασμού στο pazari-vivliou.gr
+			.fb-login(onclick="fbLogin()")
+				span.icon-facebook3 
+				span Σύνδεση με Facebook
+			form.register-form
+				input(type="email", name="email", placeholder="Το email σας", required)
+				input(type="password", placeholder="Ο κωδικός σας (4-16 χαρακτήρες)", pattern="(.){4,16}", title="4 - 16 χαρακτήρες", required)
+				#register-rc.g-recaptcha
+				.error
+				input(type="submit", value="Εγγραφή")
+			.bottom-question Έχετε ήδη λογαριασμό;
+				a(onclick="promptLogin()") Σύνδεση
+		.tab.f-pass
+			span.tab-head Κανένα πρόβλημα!
+			span.tab-head-tagline Εισάγετε το email σας παρακάτω και θα λάβετε οδηγίες για το πως να επαναφέρετε τον κωδικό σας
+			form.f-pass-form
+				input(type="email", name="email", placeholder="Το email σας", required)
+				#forgot-password-rc.g-recaptcha
+				.error
+				input(type="submit", value="Επαναφορά κωδικού")
+			.bottom-question Θυμηθήκατε τον κωδικό;
+				a(onclick="promptLogin()") Σύνδεση
+			

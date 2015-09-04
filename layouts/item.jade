@@ -1,0 +1,97 @@
+﻿doctype html
+html(lang="el")
+	include head.jade
+	body
+		include main-nav.jade
+		.main-content-wrapper
+			.center-wrapper
+				include sidebars.jade
+				.listings
+					.container
+						.item-content-wrapper(itemscope, itemtype="http://schema.org/Book")
+							meta(itemprop="image", content="https://pazari-vivliou.gr"+(sres.img?sres.img:"/noimg.jpg"))
+							meta(itemprop="url", content="https://pazari-vivliou.gr/item/"+sres.bnid+'/'+sres.alias)
+							.left-content
+								img.item-image.ws(src=sres.img?sres.img:"/noimg.jpg")
+								.item-price-wrapper.ws
+									if sres.price || sres.marketPrice
+										.old-price
+											span=(sres.price||sres.marketPrice)
+											span  &euro;
+										.new-price
+											span Τιμή:&nbsp;
+											span=price(sres.price, sres.marketPrice) + " "
+											span &euro;
+										.add-to-cart-btn
+											.add-to-cart
+											span Προσθήκη στο καλάθι
+										.add-to-wl-btn
+											.add-to-wl
+											span Προσθήκη στο wishlist
+									else
+										span.no-stock Εξαντλήθηκε
+							.right-content
+								h1.item-title(itemprop="name")=sres.title
+								h2.item-author(itemprop="author")=sres.author
+								.social-wrapper
+									.fb-like(data-href="https://pazari-vivliou.gr/item/"+ sres.bnid + '/' +sres.alias, data-layout="button_count", data-action="like", data-show-faces="true", data-share="true")
+									a.twitter-share-button(data-url="https://pazari-vivliou.gr/item/"+sres.bnid+'/'+sres.alias, href="https://twitter.com/share", data-via="PazariVivliouGR", data-related="PazariVivliouGR")
+									a(href="//www.pinterest.com/pin/create/button/?url=" + (encodeURIComponent("https://pazari-vivliou.gr/item/" + sres.bnid + '/' + sres.alias)) + "&media=" + (encodeURIComponent("https://pazari-vivliou.gr"+(sres.img?sres.img:"/noimg.jpg"))) + "&description=" + encodeURIComponent(head.metaTitle), data-pin-do="buttonPin", data-pin-config="beside", data-pin-color="white")
+										img(src="//assets.pinterest.com/images/pidgets/pinit_fg_en_rect_white_20.png")
+									.g-plusone(data-size="medium" data-href="https://pazari-vivliou.gr/item/"+ sres.bnid + '/' +sres.alias)
+								.item-desc 
+									if sres.desc
+										span !{sres.desc}
+									else
+										span.nodesc Δεν υπάρχει διαθέσιμη περιγραφή :(
+								.listing-category
+									h2.title Πληροφορίες
+									.info-wrapper
+										if sres.translator && sres.translator.trim()
+											.info-entry
+												span Μετάφραση
+												span(itemprop="translator")=sres.translator.trim()
+										if sres.year && sres.year.trim()
+											.info-entry
+												span Έτος
+												span(itemprop="copyrightYear")=sres.year.trim()
+										if sres.pages && sres.pages.trim()
+											.info-entry
+												span Σελίδες
+												span(itemprop="numberOfPages")=sres.pages.trim()
+										if sres.isbn && sres.isbn.trim()
+											.info-entry
+												span ISBN
+												span(itemprop="isbn")=sres.isbn.trim()
+										if sres.isbn13 && sres.isbn13.trim()
+											.info-entry
+												span ISBN-13
+												span(itemprop="isbn")=sres.isbn13.trim()
+										if sres.publisher && sres.publisher.trim()
+											.info-entry
+												span Εκδώτης
+												span(itemprop="publisher")=sres.publisher.trim()
+										if sres.bnid
+											.info-entry
+												span ID
+												span=sres.bnid
+										if sres.categories && sres.categories.length
+											.total-results="Ανήκει σε:"
+											each val in sres.categories
+												if !isNaN(val)
+													a=val
+												else
+													a.sub-cat.ws.ani02(href="/list/"+val.bnid+"/"+alias(val.title))=val.title
+									.author-wrapper
+										if sres.authorimg
+											img.author-img(src=sres.authorimg, alt=sres.author, title=sres.author)
+										h2.author-name=sres.author
+										if sres.authordesc
+											.author-desc=sres.authordesc.split(/\<(.)*\>/).join('')
+						.fb-comments(data-href="https://pazari-vivliou.gr/item/" + sres.bnid + "/" + sres.alias, data-numposts="5", data-width="100%")
+						if sres.categories && sres.categories[0]
+							.listing-category
+								h2.title=sres.categories[0].title
+								each val in nchome
+									include product.jade
+		include footer.jade
