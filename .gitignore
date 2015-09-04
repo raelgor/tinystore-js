@@ -6,3 +6,4 @@ ssl/*
 *.psd
 *.tif
 *.tgz
+daemons
