@@ -7,7 +7,7 @@
 		.title(itemprop="name")=val.title
 		.owner(itemprop="author")=val.author
 	.price-wrapper
-		if val.price || val.marketPrice
+		if price(val)
 			.add-to-cart(title="Προσθήκη στο καλάθι")
 			.add-to-wl(title="Προσθήκη στο wishlist")
 		.prices
@@ -15,7 +15,7 @@
 				span.unavail Εξαντλήθηκε
 			else
 				.old-price
-					span=price(val)+" "
+					span=(val.price||val.marketPrice)+" "
 					if val.price
 						span &euro;
 				.final-price

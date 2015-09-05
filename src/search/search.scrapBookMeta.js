@@ -33,6 +33,14 @@
 
                 } catch (x) { };
 
+                // Scrap availability
+                try {
+
+                    var _ = data.split("[Εξαντλημένο]");
+                    item.unavail = _.length > 1 ? 1 : 0;
+
+                } catch (x) { };
+
                 // Scrap image
                 try {
 
