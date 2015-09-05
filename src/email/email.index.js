@@ -8,3 +8,4 @@ global.email = nodemailer.createTransport({
         pass: config.email.pass
     }
 });
+
