@@ -14,7 +14,7 @@
 
             if (!v.test(String(req.body.email))) return reject();
 
-            server.db.collection('users').find({ email: String(req.body.email), verified: 1 }).toArray(function (err, data) {
+            server.db.collection('users').find({ email: String(req.body.email) }).toArray(function (err, data) {
 
                 if (data.length) return res.send('{ "error": "2" }');
 
@@ -28,6 +28,10 @@
 
                 });
 
+                // Email accordingly and before we insert to
+                // db so that we insert email info too
+                newUser.sendVerificationEmail();
+
                 server.db.collection('users').insert(newUser);
 
                 new CacheObject([
@@ -37,24 +41,6 @@
 
                 res.cookie('uauth', newToken.token, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true, secure: true });
                 res.send('{ "success": "1" }');
-
-                // setup e-mail data with unicode symbols
-                var mailOptions = {
-                    from: 'Παζάρι Βιβλίου <no-reply@pazari-vivliou.gr>', // sender address
-                    to: String(req.body.email), // list of receivers
-                    subject: 'Καλώς ήλθατε στο Παζάρι Βιβλίου! Επιβεβαιώστε το email σας για να συνεχίσετε.', // Subject line
-                    text: 'Hello world', // plaintext body
-                    html: '<b>Καλώς ήλθατε στο Παζάρι Βιβλίου! Κάντε κλικ εδώ για να επιβεβαιώσετε το email σας: </b><a>link</a>' // html body
-                };
-
-                // send mail with defined transport object
-                email.sendMail(mailOptions, function (error, info) {
-                    if (error) {
-                        console.log(error);
-                    } else {
-                        console.log('Message sent: ' + info.response);
-                    }
-                });
 
             });
 

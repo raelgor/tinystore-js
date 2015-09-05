@@ -88,6 +88,45 @@ $(document).ready(function () {
 
     });
 
+    $('.f-pass-form').submit(function (e) {
+
+        e.preventDefault();
+
+        if (!grecaptcha.getResponse(window._login_rc)) {
+
+            $('.error').html('Παρακαλούμε επιβεβαιώστε ότι δεν είστε ρομπότ κάνοντας κλίκ στο παραπάνω κουτάκι.');
+
+            return false;
+
+        }
+
+        $.post('/api/fpass', {
+            email: $('.f-pass-form [type="email"]').val(),
+            cp_key: grecaptcha.getResponse(window._login_rc)
+        }, function (res) {
+
+            try {
+
+                res = JSON.parse(res);
+
+            } catch (err) { res = {} }
+
+            if (res.success) {
+
+                $('.f-pass-form').html('');
+                $('.tab.f-pass .tab-head-tagline').html('Σας στείλαμε ένα email με οδηγίες ανάκτησης του κωδικού σας.');
+                $('.tab.f-pass .tab-head').html('Σχεδόν έτοιμοι!');
+
+            } else {
+
+                $('.error').html('Παρακαλούμε ελέγξτε τα στοιχεία που δώσατε και ξαναπροσπαθήστε.')
+
+            }
+
+        });
+
+    });
+
     $('.login-form').submit(function (e) {
 
         e.preventDefault();
@@ -167,7 +206,7 @@ function promptLogin() {
 
     if (_NOT_TOUCH) $('.f-window .tab.login [type="email"]').focus();
 
-    window._login_rc = !isNaN(window._login_rc) || grecaptcha.render('login-rc', {
+    if (isNaN(window._login_rc))  window._login_rc = grecaptcha.render('login-rc', {
         'sitekey': '6LcVDgwTAAAAAKH6x-F-CIg4AfX7Kic-rr5jBRNX',
         'theme': 'light'
     });
@@ -181,7 +220,8 @@ function promptRegister() {
 
     if (_NOT_TOUCH) $('.f-window .tab.register [type="email"]').focus();
 
-    window._register_rc = !isNaN(window._register_rc) || grecaptcha.render('register-rc', {
+
+    if (isNaN(window._register_rc)) window._register_rc = grecaptcha.render('register-rc', {
         'sitekey': '6LcVDgwTAAAAAKH6x-F-CIg4AfX7Kic-rr5jBRNX',
         'theme': 'light'
     });
@@ -196,7 +236,7 @@ function promptFPass() {
 
     if (_NOT_TOUCH) $('.f-window .tab.f-pass [name="email"]').focus();
 
-    window._fpass_rc = !isNaN(window._fpass_rc) || grecaptcha.render('forgot-password-rc', {
+    if (isNaN(window._fpass_rc)) window._fpass_rc = grecaptcha.render('forgot-password-rc', {
         'sitekey': '6LcVDgwTAAAAAKH6x-F-CIg4AfX7Kic-rr5jBRNX',
         'theme': 'light'
     });

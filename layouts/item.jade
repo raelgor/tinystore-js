@@ -16,7 +16,7 @@ html(lang="el")
 								.item-price-wrapper.ws
 									if price(sres)
 										.old-price
-											span=(sres.price||price(sres))
+											span=(sres.price||sres.marketPrice)
 											span  &euro;
 										.new-price
 											span Τιμή:&nbsp;

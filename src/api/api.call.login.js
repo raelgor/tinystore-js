@@ -12,6 +12,10 @@
 
         function resolve() {
 
+            var bounced = bounce.check({ request: "login", username: "kosmas" });
+
+            if (bounced) return reject();
+
             // Find user in database
             server.db.collection('users').find({ email: String(formData.email) }).toArray(function (err, data) {
 

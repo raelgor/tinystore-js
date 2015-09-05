@@ -21,11 +21,21 @@ global.pwh = require('password-hash');
 
 global.querystring = require('querystring');
 
+// Load models
+require('./src/models/model.CacheObject.js');
+require('./src/models/model.SessionToken.js');
+require('./src/models/model.User.js');
+require('./src/models/model.MailOptions.js');
+
 // Load utils
 require('./src/utils/price.js');
 require('./src/utils/verifyCaptcha.js');
 require('./src/utils/log.js');
 require('./src/utils/alias.js');
+require('./src/utils/bounce.js');
+
+// Load SMTP transporter object
+require('./src/email/email.index.js');
 
 // Load search scrappers
 require('./src/search/search.cast.js');
