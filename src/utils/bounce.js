@@ -16,6 +16,7 @@ bounce.RequestPattern = function (pattern) {
     this.on = function (val) { this._on = val; return this; }
     this.over = function (val) { this._over = val; return this; }
     this.for = function (val) { this._for = val; return this; }
+    this.onUnknown = function (val) { this._onUnknown = val; return this; }
 
     this.pattern = pattern;
 
@@ -36,10 +37,10 @@ bounce.check = function (requestObject) {
     var requestIndex = this.requestIndex;
 
     // If unrecognized request, let it pass
-    if (!requestID) return true;
+    if (!requestID) return requestPattern._onUnknown;
 
     // If requestID is banned, cut it
-    if (requestID in blacklistIndex) return false;
+    if (requestID in blacklistIndex) return _onUnknown;
 
     // Make or load this request's record
     var record = requestIndex[requestID] || (requestIndex[requestID] = { status: 0, pool: 0 });
