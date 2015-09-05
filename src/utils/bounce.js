@@ -1,3 +1,9 @@
+// @todo:
+// http://stackoverflow.com/questions/12168708/is-there-any-limit-to-settimeout
+// settimeout from factory
+// testable
+// Limit #of requestIndex id's explicitly
+
 ﻿// Used to add patterns
 global.bounce = function (requestPattern) {
 
