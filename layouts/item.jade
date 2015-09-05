@@ -14,13 +14,13 @@ html(lang="el")
 							.left-content
 								img.item-image.ws(src=sres.img?sres.img:"/noimg.jpg")
 								.item-price-wrapper.ws
-									if sres.price || sres.marketPrice
+									if price(sres)
 										.old-price
-											span=(sres.price||sres.marketPrice)
+											span=(sres.price||price(sres))
 											span  &euro;
 										.new-price
 											span Τιμή:&nbsp;
-											span=price(sres.price, sres.marketPrice) + " "
+											span=price(sres) + " "
 											span &euro;
 										.add-to-cart-btn
 											.add-to-cart

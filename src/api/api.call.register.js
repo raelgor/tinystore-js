@@ -40,15 +40,15 @@
 
                 // setup e-mail data with unicode symbols
                 var mailOptions = {
-                    from: 'Παζάρι Βιβλίου ✔ <no-reply@pazari-vivliou.gr>', // sender address
+                    from: 'Παζάρι Βιβλίου <no-reply@pazari-vivliou.gr>', // sender address
                     to: String(req.body.email), // list of receivers
                     subject: 'Καλώς ήλθατε στο Παζάρι Βιβλίου! Επιβεβαιώστε το email σας για να συνεχίσετε.', // Subject line
-                    text: 'Hello world ✔', // plaintext body
+                    text: 'Hello world', // plaintext body
                     html: '<b>Καλώς ήλθατε στο Παζάρι Βιβλίου! Κάντε κλικ εδώ για να επιβεβαιώσετε το email σας: </b><a>link</a>' // html body
                 };
 
                 // send mail with defined transport object
-                mailTransporter.sendMail(mailOptions, function (error, info) {
+                email.sendMail(mailOptions, function (error, info) {
                     if (error) {
                         console.log(error);
                     } else {
