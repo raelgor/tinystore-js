@@ -1,6 +1,17 @@
 ﻿var zenx = require('zenx');
 var argvs = {};
 
+// Load commonly used modules
+global.http = require('http');
+global.https = require('https');
+
+// Detect internal IP
+global.nw = require('os').networkInterfaces().eth0[0].address;
+zx.log('Default IP: ' + global.nw);
+
+// Index process arguments
+process.argv.forEach(function (key) { argvs[key] = 1; });
+
 global.config = require('./config.json');
 
 global.mongodb = require('mongodb');
@@ -10,36 +21,28 @@ global.pwh = require('password-hash');
 
 global.querystring = require('querystring');
 
-var nodemailer = require('nodemailer');
+// Load utils
+require('./src/utils/price.js');
+require('./src/utils/verifyCaptcha.js');
+require('./src/utils/log.js');
+require('./src/utils/alias.js');
 
-// create reusable transporter object using SMTP transport
-global.mailTransporter = nodemailer.createTransport({
-    service: config.email.service,
-    auth: {
-        user: config.email.user,
-        pass: config.email.pass
-    }
-});
+// Load search scrappers
+require('./src/search/search.cast.js');
+require('./src/search/search.fetchBookByBnid.js');
+require('./src/search/search.getBooksFromUrl.js');
+require('./src/search/search.getExtraInfo.js');
+require('./src/search/search.scrapAuthorByBnid.js');
+require('./src/search/search.scrapBookMeta.js');
 
 // reCAPTCHA key
 global.RCP_KEY = config.grecaptcha.key;
 
-global.http = require('http');
-global.https = require('https');
-
+// Facebook backend JS SDK
 global.FB = require('fb');
-
-process.argv.forEach(function (key) { argvs[key] = 1; });
 
 // Enables analytic logs
 global._debug = "--debug" in argvs;
-
-// Debug log
-global.log = require('./src/debug.log.js');
-
-// Detect internal IP
-global.nw = require('os').networkInterfaces().eth0[0].address;
-zx.log('Default IP: ' + global.nw);
 
 // Sitemap generator
 global.sitemap = require('./src/sitemap.js');

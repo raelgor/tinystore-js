@@ -2,8 +2,9 @@ var queue = [];
 var working;
 var fs = require('fs');
 var log = function (msg) { process.send({ cmd: 'log', msg: msg }); };
+var config = require('./../config.json');
 
-var defaultIndex = '<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><sitemap><loc>https://pazari-vivliou.gr/sitemaps/base.xml</loc></sitemap></sitemapindex>';
+var defaultIndex = '<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><sitemap><loc>https://' + config.domain + '/sitemaps/base.xml</loc></sitemap></sitemapindex>';
 
 log('sitemap child_process started (' + process.pid + ')');
 
@@ -11,7 +12,7 @@ var indexFile;
 
 try { indexFile = String(fs.readFileSync('./assets/sitemaps/index.xml')); } catch (e) { }
 
-var alias = require('./alias.js');
+require('./utils/alias.js');
 
 log('sitemap indexFile loaded.');
 
@@ -67,7 +68,7 @@ function build() {
         var file = '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">';
 
         file += '<url>' +
-                    '<loc>https://pazari-vivliou.gr/list/' + catObj.cat.bnid + '/' + alias(catObj.cat.title) + '</loc>' +
+                    '<loc>https://' + config.domain + '/list/' + catObj.cat.bnid + '/' + alias(catObj.cat.title) + '</loc>' +
                     '<lastmod>' + new Date().toJSON() + '</lastmod>' +
                     '<changefreq>weekly</changefreq>' +
                 '</url>';
@@ -77,7 +78,7 @@ function build() {
             if (!c || typeof c == "string") return;
 
             file += '<url>' +
-                        '<loc>https://pazari-vivliou.gr/item/' + c.bnid + '/' + alias(c.title) + '</loc>' +
+                        '<loc>https://' + config.domain + '/item/' + c.bnid + '/' + alias(c.title) + '</loc>' +
                         '<lastmod>' + new Date().toJSON() + '</lastmod>' +
                         '<changefreq>weekly</changefreq>' +
                     '</url>';
@@ -122,7 +123,7 @@ function build() {
 
             added++;
 
-            indexFile += "<sitemap><loc>https://pazari-vivliou.gr/sitemaps/"
+            indexFile += "<sitemap><loc>https://' + config.domain + '/sitemaps/"
                             + catObj.term.split('::').join('-') + '.xml' +
                             "</loc><lastmod>" + new Date().toJSON() + "</lastmod></sitemap>";
 

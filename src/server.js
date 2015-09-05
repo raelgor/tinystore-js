@@ -4,10 +4,10 @@ var express = require('express');
 
 global.appServer = new zx.Server({
     "db_type": "mongodb",
-    "db_host": "mongodb://" + global.nw + ":27017/_eshop_bookstore",
+    "db_host": "mongodb://" + nw + ":27017/_eshop_bookstore",
     "db_user": "",
     "db_pass": "",
-    "bind": global.nw,
+    "bind": nw,
     "port": "443",
     "https": true,
     "ws": true,
@@ -73,7 +73,7 @@ function onstart() {
     server.bouncer.config.GLOBAL_IP_PER_INTERVAL = 1500;
 
     // Force non-www
-    this.Router.use(force('https://pazari-vivliou.gr'));
+    this.Router.use(force('https://' + config.domain));
 
     // Block libwww-perl
     this.Router.use(function (req, res, next) {
@@ -113,58 +113,22 @@ function onstart() {
     require('./api/api.index.js')(this);
 
     // Search page
-    require('./page.search.js')(this);
+    require('./pages/page.search.js')(this);
 
     // Item page
-    require('./page.item.js')(this);
+    require('./pages/page.item.js')(this);
 
     // Category page
-    require('./page.category.js')(this);
+    require('./pages/page.category.js')(this);
 
     // All categories
-    require('./page.allCategories.js')(this);
+    require('./pages/page.allCategories.js')(this);
 
-    // All categories
-    require('./page.static.js')(this);
+    // Static pages
+    require('./pages/page.static.js')(this);
 
-    // Serve app
-    this.Router.get('/', function (req, res, next) {
-
-        res.setHeader("Cache-Control", "no-cache, must-revalidate");
-
-        res.send(jadeCache["/"].template({
-            baseUrl: '/',
-            udata: res._userData,
-            csrf: zx.newSession.call(server.auth),
-            cartText: "Το καλάθι σας είναι άδειο",
-            loginText1: "Σύνδεση",
-            loginText2: "Εγγραφή",
-            alias: require('./alias.js'),
-            price: price,
-            head: {
-                title: "Παζάρι Βιβλίου - Το Online Βιβλιοπωλείο",
-                metaTitle: "Παζάρι Βιβλίου - Το Online Βιβλιοπωλείο",
-                metaKeywords: "eshop shop bookstore online books Παζάρι Βιβλίου Το Online Βιβλιοπωλείο ebooks pazari vivliou παζάρι βιβλίου παζαρι βιβλιου βιβλιοπωλείο βιβλιοπωλειο",
-                metaDescription: "Το μεγαλύτερο e-shop βιβλίων με τις καλύτερες τιμές!",
-                metaOgImage: "https://" + config.domain + "/ogimg.jpg",
-                metaOgSite_name: "Παζάρι Βιβλίου - Το Online Βιβλιοπωλείο",
-                metaOgUrl: "https://" + config.domain,
-                metaOgTitle: "Παζάρι Βιβλίου - Το Online Βιβλιοπωλείο",
-                metaOgType: "website",
-                metaOgLocale: "el_GR",
-                metaOgDescription: "Το μεγαλύτερο e-shop βιβλίων με τις καλύτερες τιμές!"
-            },
-            suggested: jadeCache["/"].data.suggested,
-            categories: jadeCache["/"].data.categories,
-            menu: jadeCache["/"].data.menu,
-            carousel: jadeCache["/"].data.carousel,
-            nchome: jadeCache["/"].data.nchome,
-            otherbooks: jadeCache["/"].data.otherbooks
-        }));
-
-        res.end();
-
-    });
+    // Index page
+    require('./pages/page.index.js')(this);
 
     // Always add cache control header
     this.Router.use(function (req, res, next) {
@@ -200,25 +164,9 @@ function onstart() {
 
     });
 
-    //server.api.core = require(path.resolve(__dirname + '/../api/core.js'));
-
     // Serve static content in assets folder as is
     this.Router.use(express.static(__dirname + '/../assets'));
 
 }
 
 global.appServer.onstart = onstart;
-
-global.price = function (price, marketPrice) {
-
-    var finalPrice = "";
-
-    marketPrice = parseFloat(marketPrice);
-    price = parseFloat(price);
-
-    finalPrice = marketPrice && (parseFloat(marketPrice) < (parseFloat(price)*.80 || Infinity)) ? Math.round(parseFloat(marketPrice) * .95 * 100) / 100 : Math.round(price * .80 * 100) / 100;
-
-    // Make sure there's 2 digits after decimal point
-    return finalPrice + (String(finalPrice).split('.')[1] && String(finalPrice).split('.')[1].length != 2 ? '0' : '');
-
-};

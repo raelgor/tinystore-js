@@ -1,5 +1,5 @@
 ﻿global.alias = function (string) {
-
+    
     string = string || "";
 
     var ret = "";
