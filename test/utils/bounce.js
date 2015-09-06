@@ -66,7 +66,7 @@ describe('Bounce', function() {
             assert.equal(bounce.requestPatterns[0], bounce.getPatternFromRequestObject(testObject));
         });
         
-        it('shouldn\'t match patterns that don\t exist', function () {
+        it('shouldn\'t match patterns that don\'t exist', function () {
             var testObject = { request: "login", foo: "right2", username: "kosmas" };
             assert.equal(false, bounce.getPatternFromRequestObject(testObject));
         });
