@@ -83,11 +83,11 @@ global.fetchBookByBnid = function (bnid) {
                         i && i.bnid && db.update({ bnid: i.bnid }, i);
                     });
 
-                    // Update availability
+                    // Update availability (can only go from avail to unavail)
                     scrapBookMeta(bnid).then(function (item) {
 
                         if (!item) return;
-                        db.update({ bnid: bnid }, { unavail: item.unavail });
+                        item.unavail && db.update({ bnid: bnid }, { unavail: item.unavail });
 
                     });
 

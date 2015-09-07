@@ -8,7 +8,7 @@ html(lang="el")
 				include sidebars.jade
 				.listings
 					.container
-						.item-content-wrapper(itemscope, itemtype="http://schema.org/Book")
+						.item-content-wrapper(itemscope, itemtype="http://schema.org/Book", data-bnid=sres.bnid)
 							meta(itemprop="image", content="https://pazari-vivliou.gr"+(sres.img?sres.img:"/noimg.jpg"))
 							meta(itemprop="url", content="https://pazari-vivliou.gr/item/"+sres.bnid+'/'+sres.alias)
 							.left-content

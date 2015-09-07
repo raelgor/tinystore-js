@@ -18,6 +18,14 @@
 
                 if (data.length) return res.send('{ "error": "2" }');
 
+                var lists = {};
+
+                try {
+
+                    lists = JSON.parse(req.body.lists);
+
+                } catch (err) { }
+
                 var newToken = new SessionToken();
                 var newUser = new User({
 
@@ -27,6 +35,8 @@
                     verified: 0
 
                 });
+
+                newUser.addLists(lists);
 
                 // Email accordingly and before we insert to
                 // db so that we insert email info too

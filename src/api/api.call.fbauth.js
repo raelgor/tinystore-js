@@ -32,12 +32,22 @@
                         // Either way we need a new session token
                         var newToken = new SessionToken();
 
+                        var lists = {};
+
+                        try {
+
+                            lists = JSON.parse(formData.lists);
+
+                        } catch (err) { }
+
                         // If found, make a new session
                         if (data[0]) {
 
                             var user = (server.userCache.users[data[0].uuid] && server.userCache.users[data[0].uuid].obj) || new User(data[0]);
 
                             uauth = newToken.token;
+
+                            user.addLists(lists);
 
                             if (user.tokens.length >= 10) {
 
@@ -87,6 +97,8 @@
                                 verified: 1
 
                             });
+
+                            newUser.addLists(lists);
 
                             server.db.collection('users').insert(newUser);
 

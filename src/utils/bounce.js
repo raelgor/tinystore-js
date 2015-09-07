@@ -11,6 +11,7 @@ global.bounce = function (requestPattern) {
 // Wrap the pattern with this model to avoid conflicting with
 // the on, over and for keys
 bounce.RequestPattern = function (pattern) {
+
     // Default values
     this._on = 100;
     this._over = 10000;
@@ -95,6 +96,7 @@ bounce.check = function (requestObject) {
 
 // Used to find the pattern of a request
 bounce.getPatternFromRequestObject = function (requestObject) {
+
     var result = false;
     
     this.requestPatterns.forEach(function (RequestPatternObject) {

@@ -33,6 +33,8 @@ require('./src/utils/verifyCaptcha.js');
 require('./src/utils/log.js');
 require('./src/utils/alias.js');
 require('./src/utils/bounce.js');
+require('./src/utils/getBooksByBnids.js');
+require('./src/utils/gen.js');
 
 // Load SMTP transporter object
 require('./src/email/email.index.js');

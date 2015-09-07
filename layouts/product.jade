@@ -1,4 +1,4 @@
-﻿a.product.ws.ani02(itemscope, title=val.title, itemtype="http://schema.org/Book", href="/item/"+val.bnid+"/"+encodeURIComponent(val.alias))
+﻿a.product.ws.ani02(itemscope, title=val.title, data-bnid=val.bnid, itemtype="http://schema.org/Book", href="/item/"+val.bnid+"/"+encodeURIComponent(val.alias))
 	meta(itemprop="image", content="https://pazari-vivliou.gr"+(val.img?val.img:"/noimg.jpg"))
 	meta(itemprop="url", content="https://pazari-vivliou.gr/item/"+val.bnid+'/'+val.alias)
 	.image

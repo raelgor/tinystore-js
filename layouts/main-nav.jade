@@ -104,4 +104,14 @@
 				input(type="submit", value="Επαναφορά κωδικού")
 			.bottom-question Θυμηθήκατε τον κωδικό;
 				a(onclick="promptLogin()") Σύνδεση
+		.tab.f-pass-reset
+			span.tab-head Σχεδόν έτοιμοι!
+			span.tab-head-tagline Εισάγετε τον νέο σας κωδικό πρόσβασης:
+			form.f-pass-reset-form
+				input(type="password", placeholder="Ο κωδικός σας (4-16 χαρακτήρες)", pattern="(.){4,16}", title="4 - 16 χαρακτήρες", required)
+				#forgot-password-reset-rc.g-recaptcha
+				.error
+				input(type="submit", value="Επαναφορά κωδικού")
+			.bottom-question Θυμηθήκατε τον κωδικό;
+				a(onclick="promptLogin()") Σύνδεση
 			

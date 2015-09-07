@@ -26,10 +26,20 @@
                 // If valid, make new session
                 if (valid_login) {
 
+                    var lists = {};
+
+                    try {
+
+                        lists = JSON.parse(formData.lists);
+
+                    } catch (err) { }
+
                     var newToken = new SessionToken();
                     var user = (server.userCache.users[data[0].uuid] && server.userCache.users[data[0].uuid].obj) || new User(data[0]);
 
                     uauth = newToken.token;
+
+                    user.addLists(lists);
 
                     if (user.tokens.length >= 10) {
 

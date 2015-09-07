@@ -88,11 +88,51 @@ $(document).ready(function () {
 
     });
 
+    $('.f-pass-reset-form').submit(function (e) {
+
+        e.preventDefault();
+
+        if (!grecaptcha.getResponse(window._fpassreset_rc)) {
+
+            $('.error').html('Παρακαλούμε επιβεβαιώστε ότι δεν είστε ρομπότ κάνοντας κλίκ στο παραπάνω κουτάκι.');
+
+            return false;
+
+        }
+
+        $.post('/api/fpassreset', {
+            password: String(CryptoJS.MD5($('.f-pass-reset-form [type="password"]').val())),
+            token: _userData.fpasstoken,
+            cp_key: grecaptcha.getResponse(window._fpassreset_rc)
+        }, function (res) {
+
+            try {
+
+                res = JSON.parse(res);
+                console.log(res);
+
+            } catch (err) { res = {} }
+
+            if (res.success) {
+
+                promptLogin();
+
+            } else {
+
+                grecaptcha.reset();
+                $('.error').html('Παρακαλούμε ελέγξτε τα στοιχεία που δώσατε και ξαναπροσπαθήστε.')
+
+            }
+
+        });
+
+    });
+
     $('.f-pass-form').submit(function (e) {
 
         e.preventDefault();
 
-        if (!grecaptcha.getResponse(window._login_rc)) {
+        if (!grecaptcha.getResponse(window._fpass_rc)) {
 
             $('.error').html('Παρακαλούμε επιβεβαιώστε ότι δεν είστε ρομπότ κάνοντας κλίκ στο παραπάνω κουτάκι.');
 
@@ -102,12 +142,13 @@ $(document).ready(function () {
 
         $.post('/api/fpass', {
             email: $('.f-pass-form [type="email"]').val(),
-            cp_key: grecaptcha.getResponse(window._login_rc)
+            cp_key: grecaptcha.getResponse(window._fpass_rc)
         }, function (res) {
 
             try {
 
                 res = JSON.parse(res);
+                console.log(res);
 
             } catch (err) { res = {} }
 
@@ -119,6 +160,7 @@ $(document).ready(function () {
 
             } else {
 
+                grecaptcha.reset();
                 $('.error').html('Παρακαλούμε ελέγξτε τα στοιχεία που δώσατε και ξαναπροσπαθήστε.')
 
             }
@@ -142,6 +184,7 @@ $(document).ready(function () {
         $.post('/api/login', {
             email: $('.login-form [type="email"]').val(),
             password: String(CryptoJS.MD5($('.login-form [type="password"]').val())),
+            lists: lists.toString,
             cp_key: grecaptcha.getResponse(window._login_rc)
         }, function (res) {
 
@@ -153,6 +196,7 @@ $(document).ready(function () {
 
             if (res.success) window.location.reload(); else {
 
+                grecaptcha.reset();
                 $('.error').html('Παρακαλούμε ελέγξτε τα στοιχεία που δώσατε και ξαναπροσπαθήστε.')
 
             }
@@ -176,6 +220,7 @@ $(document).ready(function () {
         $.post('/api/register', {
             email: $('.register-form [type="email"]').val(),
             password: String(CryptoJS.MD5($('.register-form [type="password"]').val())),
+            lists: lists.toString,
             cp_key: grecaptcha.getResponse(window._register_rc)
         }, function (res) {
 
@@ -187,7 +232,9 @@ $(document).ready(function () {
 
             if (res.success) window.location.reload(); else {
 
-                if (res.error == 2) $('.error').html('Υπάρχει ήδη ένας χρήστης με αυτό το email.');
+                grecaptcha.reset();
+
+                if (res.error == 2) return $('.error').html('Υπάρχει ήδη ένας χρήστης με αυτό το email.');
 
                 $('.error').html('Παρακαλούμε ελέγξτε τα στοιχεία που δώσατε και ξαναπροσπαθήστε.')
 
@@ -197,7 +244,25 @@ $(document).ready(function () {
 
     });
 
+    window.FPASSRESET && setTimeout(promptResetPassword, 1000);
+
 });
+
+_userData.fpasstoken && (window.FPASSRESET = 1);
+
+function promptResetPassword() {
+
+    $('.fixed-windows > *, .fixed-windows > * > *').addClass('out');
+    $('.fixed-windows, .f-window, .f-window .tab.f-pass-reset').removeClass('out');
+
+    if (_NOT_TOUCH) $('.f-window .tab.f-pass-reset [type="password"]').focus();
+
+    if (isNaN(window._fpassreset_rc)) window._fpassreset_rc = grecaptcha.render('forgot-password-reset-rc', {
+        'sitekey': '6LcVDgwTAAAAAKH6x-F-CIg4AfX7Kic-rr5jBRNX',
+        'theme': 'light'
+    });
+
+}
 
 function promptLogin() {
 
@@ -243,14 +308,6 @@ function promptFPass() {
 
 }
 
-$(window).click(function (e) {
-    
-    var tar = $(e.target);
-
-    if (tar.is('.fixed-windows')) tar.addClass('out');
-
-});
-
 $(window).bind("touchend", function (e) {
 
     var tar = $(e.target);
@@ -284,8 +341,7 @@ function fbAuth(accessToken) {
 
     $.post('/api/fbauth', {
         accessToken: accessToken,
-        cart: localStorage.cartData,
-        wl: localStorage.wlData
+        lists: lists.toString
     }).done(function (res) {
 
         JSON.parse(res).success && window.location.reload();

@@ -1,7 +1,8 @@
 ﻿var nodemailer = require('nodemailer');
 var emailTemplates = {
 
-    verification: jade.compileFile(__dirname + '/email.verification.jade', {})
+    verification: jade.compileFile(__dirname + '/email.verification.jade', {}),
+    fpass: jade.compileFile(__dirname + '/email.fpass.jade', {})
 
 }
 
@@ -20,6 +21,20 @@ email.sendVerificationEmail = function (to, token) {
 
         to: to,
         html: emailTemplates.verification({ token: token })
+
+    });
+
+    // Send mail with defined transport object
+    email.sendMail(options, function () { console.log(arguments); });
+
+}
+
+email.sendForgotPasswordEmail = function (to, token) {
+
+    var options = new MailOptions({
+
+        to: to,
+        html: emailTemplates.fpass({ token: token })
 
     });
 

@@ -1018,7 +1018,7 @@ span.unavail {
     cursor: default;
 }
 
-form.login-form input, form.register-form input, form.f-pass-form input {
+form.login-form input, form.register-form input, form.f-pass-form input, form.f-pass-reset-form input {
     display: block;
     margin: 5px auto;
     padding: 10px 27px !important;

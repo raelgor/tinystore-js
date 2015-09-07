@@ -27,7 +27,15 @@ function fn() {
         var user;
 
         // Bind user data to the response object to use later
-        res._userData = {}
+        res._userData = {
+            shippingMinimum: config.shippingMinimum,
+            shippingCost: config.shippingCost,
+            tax: config.tax
+        }
+
+        // If the request has a token in query, maybe the user clicked
+        // on forgot password verification email
+        res._userData.fpasstoken = req.query.token;
 
         // If found, add data to _userData and update cache
         function found() {

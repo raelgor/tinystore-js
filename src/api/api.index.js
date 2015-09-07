@@ -33,7 +33,8 @@ function fn() {
     this.Router.post('/api/register', require('./api.call.register.js')(server));
     this.Router.post('/api/logout', require('./api.call.logout.js')(server));
     this.Router.post('/api/fbauth', require('./api.call.fbauth.js')(server));
-    //this.Router.post('/api/fpass', require('./api.call.fpass.js')(server));
+    this.Router.post('/api/fpass', require('./api.call.fpass.js')(server));
+    this.Router.post('/api/fpassreset', require('./api.call.fpassreset.js')(server));
 
     // Unauthorized get calls
     this.Router.get('/api/verify', require('./api.call.verify.js')(server));
