@@ -2,7 +2,9 @@
 var emailTemplates = {
 
     verification: jade.compileFile(__dirname + '/email.verification.jade', {}),
-    fpass: jade.compileFile(__dirname + '/email.fpass.jade', {})
+    fpass: jade.compileFile(__dirname + '/email.fpass.jade', {}),
+    order: jade.compileFile(__dirname + '/email.order.jade', {}),
+    orderClient: jade.compileFile(__dirname + '/email.orderClient.jade', {})
 
 }
 
@@ -35,6 +37,45 @@ email.sendForgotPasswordEmail = function (to, token) {
 
         to: to,
         html: emailTemplates.fpass({ token: token })
+
+    });
+
+    // Send mail with defined transport object
+    email.sendMail(options, function () { console.log(arguments); });
+
+}
+
+
+email.sendOrderInfoEmail = function (to, order) {
+
+    var options = new MailOptions({
+
+        to: to,
+        subject: 'Νέα παραγγελία: ' + order.orderId,
+        html: emailTemplates.order({
+            order: order,
+            alias: alias,
+            price: price
+        })
+
+    });
+
+    // Send mail with defined transport object
+    email.sendMail(options, function () { console.log(arguments); });
+
+}
+
+email.sendOrderInfoEmailToClient = function (to, order) {
+
+    var options = new MailOptions({
+
+        to: to,
+        subject: 'Η παραγγελία σας στο Παζάρι Βιβλίου: ' + order.orderId,
+        html: emailTemplates.orderClient({
+            order: order,
+            alias: alias,
+            price: price
+        })
 
     });
 

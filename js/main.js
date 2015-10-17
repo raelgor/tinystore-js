@@ -8,6 +8,7 @@
 if (_userData.clearLocalStorage) {
     localStorage.removeItem('wlData');
     localStorage.removeItem('cartData');
+    ga('send', 'event', 'site-action', 'clear-local-storage-from-server-logout');
 }
 
 window._NOT_TOUCH = 0;
@@ -53,6 +54,12 @@ $(document).ready(function () {
 
     app.onresize();
 
+    $('.cart-checkout-wrapper').length && submitOrderPage();
+
+    $('.cart-checkout-wrapper').length && window.cartPage();
+
+    $('.search-wrapper form').submit(function () { toast('Γίνεται αναζήτηση σε χιλιάδες βιβλία... Παρακαλούμε περιμένετε... :)'); });
+
     $('.search-wrapper input').focus(function () { $(this).select(); });
 
     if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
@@ -70,12 +77,14 @@ $(document).ready(function () {
 
     }
 
-    $('.logout-btn').click(function (e) {
+    $('.lgt-click').click(function (e) {
 
         $.post('/api/logout', { csrf: _userData.csrf }, function (res) {
 
             localStorage.removeItem('wlData');
             localStorage.removeItem('cartData');
+
+            try { ga('send', 'event', 'site-action', 'logout-click'); } catch (err) { }
 
             window.location.reload();
 
@@ -177,7 +186,7 @@ $(document).ready(function () {
 
             $('.error').html('Παρακαλούμε επιβεβαιώστε ότι δεν είστε ρομπότ κάνοντας κλίκ στο παραπάνω κουτάκι.');
 
-            return false;
+            return ga('send', 'event', 'site-action', 'login-form-error');
 
         }
 
@@ -194,10 +203,18 @@ $(document).ready(function () {
 
             } catch (err) { res = {} }
 
-            if (res.success) window.location.reload(); else {
+            if (res.success) {
+
+                try { ga('send', 'event', 'site-action', 'login-success'); } catch (err) { }
+
+                window.location.reload();
+
+            } else {
 
                 grecaptcha.reset();
                 $('.error').html('Παρακαλούμε ελέγξτε τα στοιχεία που δώσατε και ξαναπροσπαθήστε.')
+
+                ga('send', 'event', 'site-action', 'login-error');
 
             }
 
@@ -213,7 +230,7 @@ $(document).ready(function () {
 
             $('.error').html('Παρακαλούμε επιβεβαιώστε ότι δεν είστε ρομπότ κάνοντας κλίκ στο παραπάνω κουτάκι.');
 
-            return false;
+            return ga('send', 'event', 'site-action', 'register-form-error');
 
         }
 
@@ -230,13 +247,20 @@ $(document).ready(function () {
 
             } catch (err) { res = {} }
 
-            if (res.success) window.location.reload(); else {
+            if (res.success) {
+
+                try { ga('send', 'event', 'site-action', 'register-success'); } catch (err) { }
+                window.location.reload();
+
+            } else {
 
                 grecaptcha.reset();
 
                 if (res.error == 2) return $('.error').html('Υπάρχει ήδη ένας χρήστης με αυτό το email.');
 
                 $('.error').html('Παρακαλούμε ελέγξτε τα στοιχεία που δώσατε και ξαναπροσπαθήστε.')
+
+                ga('send', 'event', 'site-action', 'register-error');
 
             }
 
@@ -276,6 +300,8 @@ function promptLogin() {
         'theme': 'light'
     });
 
+    ga('send', 'event', 'site-action', 'prompt-login');
+
 }
 
 function promptRegister() {
@@ -291,6 +317,8 @@ function promptRegister() {
         'theme': 'light'
     });
 
+    ga('send', 'event', 'site-action', 'prompt-register');
+
 }
 
 function promptFPass() {
@@ -305,6 +333,8 @@ function promptFPass() {
         'sitekey': '6LcVDgwTAAAAAKH6x-F-CIg4AfX7Kic-rr5jBRNX',
         'theme': 'light'
     });
+
+    ga('send', 'event', 'site-action', 'prompt-fpass');
 
 }
 
@@ -331,6 +361,8 @@ function fbLogin() {
 
             fbAuth(accessToken);
 
+            ga('send', 'event', 'site-action', 'fb-auth');
+
         }
 
     }, { scope: 'public_profile,email' });
@@ -351,5 +383,12 @@ function fbAuth(accessToken) {
 }
 
 function rccb() {
+
+    if (!_userData.uuid && $('.wishlist-page-wrapper, .cart-checkout-wrapper').length) setTimeout(promptLogin, 1000);
+
+    $('.cart-checkout-wrapper').length && (window._submit_order_rc = grecaptcha.render('submit-order-rc', {
+        'sitekey': '6LcVDgwTAAAAAKH6x-F-CIg4AfX7Kic-rr5jBRNX',
+        'theme': 'light'
+    }));
 
 }

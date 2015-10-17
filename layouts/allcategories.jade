@@ -9,7 +9,20 @@ html(lang="el")
 				.listings
 					.container
 						.listing-category
-							h2.title Όλες οι κατηγορίες
-							each val in categories
-								a.sub-cat.all-cat.ws.ani02(href="/list/"+val.bnid+"/"+alias(val.title))=val.title
+							h2.title(style="border-bottom: none;") Όλες οι κατηγορίες
+							.custom-list-wrapper
+								.custom-list-title Θεματικές ενότητες
+								each val in categories
+									a.sub-cat.all-cat.ws.ani02(href="/list/"+val.bnid+"/"+alias(val.title))=val.title
+							.custom-list-wrapper
+								.custom-list-title Δημοφιλείς κατηγορίες
+								a.sub-cat.all-cat.ws.ani02(href="/list/24/mageirikh") Μαγειρική
+								a.sub-cat.all-cat.ws.ani02(href="/list/492/mousikh") Μουσική
+								a.sub-cat.all-cat.ws.ani02(href="/list/579/fotografia") Φωτογραφία
+								a.sub-cat.all-cat.ws.ani02(href="/list/549/zografikh") Ζωγραφική
+								a.sub-cat.all-cat.ws.ani02(href="/list/1284/amerikanikh-logotexnia") Αμερικάνικη λογοτεχνία
+								a.sub-cat.all-cat.ws.ani02(href="/list/502/psuxologia") Ψυχολογία
+								a.sub-cat.all-cat.ws.ani02(href="/list/2686/parafusika-fainomena") Παραφυσικά φαινόμενα
+								a.sub-cat.all-cat.ws.ani02(href="/list/16/komiks") Κόμιξ
+								a.sub-cat.all-cat.ws.ani02(href="/list/8345/texnologia---genika-erga") Τεχνολογία
 		include footer.jade

@@ -52,6 +52,14 @@ function onstart() {
         "/about": {
             template: null,
             data: {}
+        },
+        "/cart": {
+            template: null,
+            data: {}
+        },
+        "/wishlist": {
+            template: null,
+            data: {}
         }
     }
 
@@ -112,23 +120,15 @@ function onstart() {
     // API
     require('./api/api.index.js')(this);
 
-    // Search page
+    // Pages
     require('./pages/page.search.js')(this);
-
-    // Item page
     require('./pages/page.item.js')(this);
-
-    // Category page
     require('./pages/page.category.js')(this);
-
-    // All categories
     require('./pages/page.allCategories.js')(this);
-
-    // Static pages
     require('./pages/page.static.js')(this);
-
-    // Index page
+    require('./pages/page.cart.js')(this);
     require('./pages/page.index.js')(this);
+    require('./pages/page.wishlist.js')(this);
 
     // Always add cache control header
     this.Router.use(function (req, res, next) {

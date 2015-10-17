@@ -31,7 +31,10 @@
 						.bounce4
 					if udata.uuid
 						.user-name-field(title=udata.displayName || udata.email)=udata.displayName || udata.email
-						a.logout-btn(href='/api/logout') Αποσύνδεση
+						.logout-btn
+							a(href="/wishlist") Wishlist
+							span -
+							a.lgt-click Αποσύνδεση
 					else
 						.login(onclick="promptLogin()") Σύνδεση
 						span /
@@ -42,6 +45,16 @@
 					.profile-image.usr
 				else
 					.profile-image
+		.flags
+			.flag
+				span.icon-coin-euro
+				span.flag-text Δωρεάν μεταφορικά για παραγγελίες άνω των 28€
+			.flag
+				span.icon-stopwatch
+				span.flag-text Παράδοση εντός 48 ωρών
+			.flag
+				span.icon-phone
+				span.flag-text Για τηλεφωνικές παραγγελίες καλέστε στο +30 261 000 9669
 .nav
 	.center-wrapper
 		a.cart-wrapper(href="/cart")
@@ -51,8 +64,8 @@
 					.bounce2
 					.bounce3
 					.bounce4
-				.cart-text Το καλάθι σας είναι άδειο
-				.cart-checkout 0,00 &euro;
+				.cart-text 
+				.cart-checkout 
 			.icon-cart
 		a.icon-home.current(href="/")
 		each val in menu

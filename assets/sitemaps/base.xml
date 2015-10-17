@@ -8,12 +8,4 @@
     <loc>https://pazari-vivliou.gr/about</loc>
     <changefreq>weekly</changefreq>
   </url>
-  <url>
-    <loc>https://pazari-vivliou.gr/privacy-policy</loc>
-    <changefreq>weekly</changefreq>
-  </url>
-  <url>
-    <loc>https://pazari-vivliou.gr/terms-of-service</loc>
-    <changefreq>weekly</changefreq>
-  </url>
 </urlset>

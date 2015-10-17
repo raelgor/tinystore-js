@@ -66,7 +66,8 @@
                             user.tokens.push(newToken);
 
                             server.db.collection('users').update({ uuid: user.uuid }, {
-                                $push: { tokens: newToken }
+                                $push: { tokens: newToken },
+                                $set: { lists: lists }
                             });
 
                             if (!(user.uuid in server.userCache.users)) {

@@ -48,9 +48,17 @@
                     quantity: 0
                 }
 
-                this.lists[key][bnid].quantity += !isNaN(lists[key][bnid].quantity) ? lists[key][bnid].quantity : 0;
+                this.lists[key][bnid].quantity += !isNaN(lists[key][bnid].quantity) ? +lists[key][bnid].quantity : 0;
 
             }
+
+    }
+
+    // Set lists from post request (or wherever)
+    this.setLists = lists => {
+
+        this.lists = { wl: {}, cart: {} }
+        this.addLists(lists);
 
     }
 

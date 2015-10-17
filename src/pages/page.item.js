@@ -11,7 +11,7 @@ function fn() {
 
     this.Router.get('/item/*', function (req, res, next) {
 
-        res.setHeader("Cache-Control", "no-cache, must-revalidate");
+        res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 
         var cache = jadeCache["/item"].data;
         var id = req.path.split('/')[2];
@@ -63,7 +63,7 @@ function fn() {
                     var bookIDs = data;
                     resNum = bookIDs.resNum;
 
-                    resolveBookIDs(bookIDs.slice(0,8));
+                    resolveBookIDs(bookIDs.slice(0,12));
 
                 });
 
@@ -93,7 +93,7 @@ function fn() {
                     head: {
                         title: sres.title + " - Παζάρι Βιβλίου",
                         metaTitle: sres.title + " - Παζάρι Βιβλίου",
-                        metaKeywords: "eshop shop bookstore online books Παζάρι Βιβλίου Το Online Βιβλιοπωλείο ebooks pazari vivliou παζάρι βιβλίου παζαρι βιβλιου βιβλιοπωλείο βιβλιοπωλειο",
+                        metaKeywords: sres.title + ' ' + alias(sres.title) + ' ' + config.defaultKeywords,
                         metaDescription: sres.desc && sres.desc.split(/[<>]/).join(''),
                         metaOgImage: "https://pazari-vivliou.gr" + (sres.img ? sres.img : "/noimg.jpg"),
                         metaOgSite_name: "Παζάρι Βιβλίου - Το Online Βιβλιοπωλείο",

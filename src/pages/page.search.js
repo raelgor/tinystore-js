@@ -13,7 +13,7 @@ function fn() {
 
     this.Router.get('/search', function (req, res, next) {
 
-        res.setHeader("Cache-Control", "no-cache, must-revalidate");
+        res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 
         var q = String(req.query.q).split('-').join('').trim().substring(0, 50).trim();
         var pageRequested = parseInt(String(req.query.p).split('.')[0]) || 1;

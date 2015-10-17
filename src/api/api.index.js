@@ -35,6 +35,8 @@ function fn() {
     this.Router.post('/api/fbauth', require('./api.call.fbauth.js')(server));
     this.Router.post('/api/fpass', require('./api.call.fpass.js')(server));
     this.Router.post('/api/fpassreset', require('./api.call.fpassreset.js')(server));
+    this.Router.post('/api/updatelists', require('./api.call.updatelists.js')(server));
+    this.Router.post('/api/order', require('./api.call.order.js')(server));
 
     // Unauthorized get calls
     this.Router.get('/api/verify', require('./api.call.verify.js')(server));

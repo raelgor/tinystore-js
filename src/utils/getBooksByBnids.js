@@ -1,5 +1,5 @@
 ﻿// Returns an array of book objects from
-// an array of bnids
+// an array of ids
 global.getBooksByBnids = function (bnids) {
 
     return gen(function* x () { 

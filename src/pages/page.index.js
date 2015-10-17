@@ -11,7 +11,7 @@ function fn() {
 
     this.Router.get('/', function (req, res, next) {
 
-        res.setHeader("Cache-Control", "no-cache, must-revalidate");
+        res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 
         res.send(jadeCache["/"].template({
             baseUrl: '/',
@@ -26,14 +26,14 @@ function fn() {
                 title: "Παζάρι Βιβλίου - Το Online Βιβλιοπωλείο",
                 metaTitle: "Παζάρι Βιβλίου - Το Online Βιβλιοπωλείο",
                 metaKeywords: "eshop shop bookstore online books Παζάρι Βιβλίου Το Online Βιβλιοπωλείο ebooks pazari vivliou παζάρι βιβλίου παζαρι βιβλιου βιβλιοπωλείο βιβλιοπωλειο",
-                metaDescription: "Το μεγαλύτερο e-shop βιβλίων με τις καλύτερες τιμές!",
+                metaDescription: config.defaultMetaDesc,
                 metaOgImage: "https://" + config.domain + "/ogimg.jpg",
                 metaOgSite_name: "Παζάρι Βιβλίου - Το Online Βιβλιοπωλείο",
                 metaOgUrl: "https://" + config.domain,
                 metaOgTitle: "Παζάρι Βιβλίου - Το Online Βιβλιοπωλείο",
                 metaOgType: "website",
                 metaOgLocale: "el_GR",
-                metaOgDescription: "Το μεγαλύτερο e-shop βιβλίων με τις καλύτερες τιμές!"
+                metaOgDescription: config.defaultMetaDesc
             },
             suggested: jadeCache["/"].data.suggested,
             categories: jadeCache["/"].data.categories,

@@ -123,7 +123,7 @@ function build() {
 
             added++;
 
-            indexFile += "<sitemap><loc>https://' + config.domain + '/sitemaps/"
+            indexFile += '<sitemap><loc>https://' + config.domain + '/sitemaps/'
                             + catObj.term.split('::').join('-') + '.xml' +
                             "</loc><lastmod>" + new Date().toJSON() + "</lastmod></sitemap>";
 

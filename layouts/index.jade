@@ -8,11 +8,15 @@ html(lang="el")
 				include sidebars.jade
 				.listings
 					.container
+						.seo-head
+							img(src="/logo.png")
+							h2 Καλώς ήρθατε στο pazari-vivliou.gr! Το online βιβλιοπωλείο με τις καλύτερες τιμές και τη μεγαλύτερη ποικιλία βιβλίων!
 						a.banner.ws.ani04(href=carousel[0]['links-to'])
 							img.ani04(alt=carousel[0].altText, src=carousel[0].image)
 						.banner-list
 							each val in carousel
-								img.ws(alt=val.altText, src=val.image, data-links-to=val['links-to'])
+								a(href=val['links-to'], data-links-to=val['links-to'], src=val.image)
+									img.ws(alt=val.altText, src=val.image, data-links-to=val['links-to'])
 						.listing-category
 							h2.title Νέες κυκλοφορίες
 							each val in nchome

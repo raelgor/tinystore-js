@@ -1,0 +1,74 @@
+﻿html
+	head
+		meta(http-equiv="Content-Type", content="text/html; charset=utf-8")
+		style. 
+			body { 
+				background: gray; 
+			}
+			.wrapper {
+				background: white;
+				padding: 20px;
+				margin: 20px auth;
+				width: 80%;
+			}
+	body
+		.wrapper
+			.head
+				img.logo(src="https://pazari-vivliou.gr/logo.png", width="30")
+				span.title Παζάρι Βιβλίου
+			.content
+				b.mail-title Νέα παραγγελία
+				div=new Date()
+				div
+					span Κωδικός παραγγελίας: 
+					span=order.orderId
+				div
+					span Σύνολο καλαθιού: 
+					span!=order.price + " &euro;"
+				div
+					span Κόστος αποστολής:
+					span!=order.shipping + " &euro;"
+				div Αντικείμενα στην παραγγελία:
+				each line in order.cart
+					div
+						a(href="https://pazari-vivliou.gr/item/" + line.bnid + '/' + alias(line.title))!=price(line) + ' &euro; [' + line.bnid + '](x' + line.qtt + ')' + line.title
+				div Στοιχεία παραγγελίας
+				div
+					span Όνομα: 
+					spna=order.form.firstname
+				div
+					span Επίθετο: 
+					spna=order.form.lastname
+				div
+					span Χώρα: 
+					spna=order.form.country
+				div
+					span Πόλη: 
+					spna=order.form.city
+				div
+					span Διεύθυνση: 
+					spna=order.form.address
+				div
+					span ΤΚ: 
+					spna=order.form.zip
+				div
+					span Τηλέφωνο: 
+					spna=order.form.phone
+				div
+					span ID χρήστη: 
+					spna=order.user.uuid
+				div
+					span Email χρήστη: 
+					spna=order.user.email
+				div
+					span FBID χρήστη: 
+					spna=order.user.fbid
+				div
+					span ΑΦΜ χρήστη: 
+					spna=order.form.afm
+				div
+					span ΔΟΥ χρήστη: 
+					spna=order.form.dou
+				div
+					span Επάγγελμα/Ιδιότητα χρήστη: 
+					spna=order.form.profession

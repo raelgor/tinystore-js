@@ -2,6 +2,7 @@
 	meta(itemprop="image", content="https://pazari-vivliou.gr"+(val.img?val.img:"/noimg.jpg"))
 	meta(itemprop="url", content="https://pazari-vivliou.gr/item/"+val.bnid+'/'+val.alias)
 	.image
+		span.x(title="Αφαίρεση από το wishlist") x
 		img.ani02(alt=val.title, src=(val.img?val.img:"/noimg.jpg"))
 	.title-wrapper
 		.title(itemprop="name")=val.title
