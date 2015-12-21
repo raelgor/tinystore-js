@@ -4,6 +4,8 @@ var fs = require('fs');
 var log = function (msg) { process.send({ cmd: 'log', msg: msg }); };
 var config = require('./../config.json');
 
+process.title = 'bs-smbuilder';
+
 var defaultIndex = '<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><sitemap><loc>https://' + config.domain + '/sitemaps/base.xml</loc></sitemap></sitemapindex>';
 
 log('sitemap child_process started (' + process.pid + ')');
