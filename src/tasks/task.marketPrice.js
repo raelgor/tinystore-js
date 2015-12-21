@@ -3,6 +3,8 @@ var express = require('express');
 var config = require('./../../config.json');
 var server = express();
 
+process.title = 'bs-task-cluster';
+
 var requestBuffer = [];
 
 var logging = 1;

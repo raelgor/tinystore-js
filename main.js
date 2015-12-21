@@ -1,6 +1,8 @@
 ﻿var zenx = require('zenx');
 var argvs = {};
 
+process.title = 'bs-cluster';
+
 // Load commonly used modules
 global.http = require('http');
 global.https = require('https');
