@@ -22,7 +22,7 @@ global.getExtraInfo = function (i) {
 
             host: config.fetcher.ip,
             method: 'get',
-            port: 8965,
+            port: config.fetcher.port,
             path: '/extra/' + (i.isbn13 || i.isbn) + '/' + i.bnid
 
         }, function (response) {
@@ -64,6 +64,6 @@ server.get('/extra/**/*', function (req, res) {
 
 });
 
-http.createServer(server).listen(8965, nw);
+http.createServer(server).listen(config.main.taskServerPort, config.main.ip);
 
-log('extra info server started on 8965.')
+log('extra info server started on ' + config.main.ip + ':' + config.main.taskServerPort)

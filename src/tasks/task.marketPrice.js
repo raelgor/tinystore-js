@@ -1,5 +1,6 @@
 var http = require('http');
 var express = require('express');
+var config = require('./../../config.json');
 var server = express();
 
 var requestBuffer = [];
@@ -16,11 +17,11 @@ server.get('/extra/**/*', function (req, res) {
 
         log('extra info for ' + isbn + ' got after ' + (new Date().getTime() - d) + ' (' + price + '). ' + requestBuffer.length + ' remaining...');
 
-        var req = http.request({
+        http.request({
 
-            host: '10.240.114.2',
+            host: config.main.ip,
             method: 'get',
-            port: 8965,
+            port: config.main.taskServerPort,
             path: '/extra/' + price + '/' + bnid
 
         }, function (response) {
@@ -33,7 +34,7 @@ server.get('/extra/**/*', function (req, res) {
 
 });
 
-http.createServer(server).listen(8965, '10.240.33.172');
+http.createServer(server).listen(config.fetcher.port, config.fetcher.ip);
 
 var log = function (str) {
 

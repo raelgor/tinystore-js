@@ -5,14 +5,16 @@ var argvs = {};
 global.http = require('http');
 global.https = require('https');
 
+global.config = require('./config.json');
+
 // Detect internal IP
-global.nw = require('os').networkInterfaces().eth0[0].address;
+global.nw = config.main.ip ||
+            require('os').networkInterfaces().eth0[0].address;
+
 zx.log('Default IP: ' + global.nw);
 
 // Index process arguments
 process.argv.forEach(function (key) { argvs[key] = 1; });
-
-global.config = require('./config.json');
 
 global.mongodb = require('mongodb');
 global.ObjectID = require('mongodb').ObjectID;
