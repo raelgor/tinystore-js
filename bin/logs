@@ -1,5 +1,7 @@
 #!/usr/bin/env node
 
+process.title = 'bs-logs';
+
 const logFiles = {
     'main': './../z.log',
     'task': './../src/tasks/z.log'
