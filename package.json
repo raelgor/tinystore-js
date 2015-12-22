@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "body-parser": "^1.13.3",
+    "colors": "^1.1.2",
     "express": "^4.13.1",
     "express-force-domain": "0.0.6",
     "fb": "^0.7.0",
