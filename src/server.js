@@ -1,6 +1,9 @@
-﻿var path = require('path');
+﻿'use strict';
+
+var path = require('path');
 var force = require('express-force-domain');
 var express = require('express');
+var fs = require('fs');
 
 global.appServer = new zx.Server({
     "db_type": "mongodb",
@@ -139,28 +142,44 @@ function onstart() {
 
     // Proxy biblionet images
     this.Router.get('/images/**/*', function (req, res, next) {
+        
+        var filepath = req.path.replace(/\?.*$/,'');
+        var filename = filepath.match(/\/([a-z0-9\.\-]*)$/i,'')[1];
+        var cacheFilepath = path.resolve(__dirname, './../cache/' + filename)
+        
+        fs.stat('./../cache/' + filename, (err, stats) => {
+        
+            if(!err) { 
+                
+                let fileStream = fs.createReadStream(cacheFilepath);
+                fileStream.pipe(res);
+                
+            } else require('http').request({
+                hostname: 'www.biblionet.gr',
+                method: 'get',
+                path: filepath
+            }, function (imgRes) {
+                
+                var cacheStream = fs.createWriteStream(cacheFilepath);
+                
+                imgRes.pipe(res);
+                imgRes.pipe(cacheStream);
 
-        require('http').request({
-            hostname: 'biblionet.gr',
-            method: 'get',
-            path: req.path
-        }, function (imgRes) {
+                imgRes.on('error', function () {
 
-            imgRes.pipe(res);
+                    this.emit('end');
 
-            imgRes.on('error', function () {
+                });
 
-                this.emit('end');
+                imgRes.on('end', function () {
 
-            });
+                    this.destroy();
 
-            imgRes.on('end', function () {
+                });
 
-                this.destroy();
-
-            });
-
-        }).end();
+            }).end();
+            
+        });
 
     });
 
