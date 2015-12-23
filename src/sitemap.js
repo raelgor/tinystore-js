@@ -1,3 +1,6 @@
+/* global zx */
+/* global sessionStats */
+
 var child_process = require('child_process');
 var child;
 var log = global.log;
@@ -56,6 +59,12 @@ module.exports = {
     child.on('message', function (msg) {
 
         msg.cmd == 'log' && zx.log('\033[0;32m[SITEMAP_CHILD_PROCESS] ' + msg.msg);
+        
+        if('info' in msg) {
+            sessionStats.sitemapsAdded += +msg.info.added;
+            sessionStats.sitemapsUpdated += +msg.info.updated;
+            sessionStats.sitemapsTotal = msg.info.total;
+        }
 
     });
 

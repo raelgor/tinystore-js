@@ -18,7 +18,9 @@ global.sessionStats = {
     totalRequests: 0,
     noUA: 0,
     httpRequests: 0,
-    httpsRequests: 0
+    httpsRequests: 0,
+    sitemapsAdded: 0,
+    sitemapsUpdated: 0
 }
 
 // Global streams

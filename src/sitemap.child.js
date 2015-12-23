@@ -1,7 +1,7 @@
 var queue = [];
 var working;
 var fs = require('fs');
-var log = function (msg) { process.send({ cmd: 'log', msg: msg }); };
+var log = function (msg, info) { process.send({ cmd: 'log', msg, info }); };
 var config = require('./../config.json');
 
 process.title = 'bs-smbuilder';
@@ -19,8 +19,6 @@ require('./utils/alias.js');
 log('sitemap indexFile loaded.');
 
 process.on('message', function (msg) {
-
-    //log('sitemap child_process obj received.');
 
     if(msg.cmd == 'queue') try {
         queue.push(JSON.parse(msg.msg));
@@ -93,7 +91,15 @@ function build() {
 
     }
     
-    log('sitemaps built in ' + (new Date().getTime() - d) + 'ms [added: ' + added + ', updated: ' + (queue.length - added) + ', total: ' + (indexFile.split('<sitemap>').length - 1) + ']');
+    log(
+        'sitemaps built in ' + (new Date().getTime() - d) + 
+        'ms [added: ' + added + 
+        ', updated: ' + (queue.length - added) + 
+        ', total: ' + (indexFile.split('<sitemap>').length - 1) + ']', {
+            added,
+            updated: (queue.length - added),
+            total: (indexFile.split('<sitemap>').length - 1)
+        });
     
     queue = [];
     working = 0;
