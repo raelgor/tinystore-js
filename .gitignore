@@ -9,3 +9,4 @@ ssl/*
 daemons
 typings/*
 jsconfig.json
+.vscode
