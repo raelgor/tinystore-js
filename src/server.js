@@ -11,11 +11,11 @@ var fs = require('fs');
 
 global.appServer = new zx.Server({
     "db_type": "mongodb",
-    "db_host": "mongodb://" + nw + ":27017/_eshop_bookstore",
+    "db_host": "mongodb://" + config.mongodb.ip + ":" + config.mongodb.port + "/" + config.mongodb.database,
     "db_user": "",
     "db_pass": "",
-    "bind": nw,
-    "port": "443",
+    "bind": config.main.ip,
+    "port": config.main.httpsPort,
     "https": true,
     "ws": true,
     "isBehindProxy": false,

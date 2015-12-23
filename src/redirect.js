@@ -16,7 +16,7 @@ redirServer.all('*', function (req, res) {
     let path = req.originalUrl;
     
     let reqInfo = {
-        protocol: 'https',
+        protocol: 'http',
         path,
         ua, 
         ip,
@@ -32,4 +32,4 @@ redirServer.all('*', function (req, res) {
 
 });
 
-require('http').createServer(redirServer).listen(80, global.nw);
+require('http').createServer(redirServer).listen(config.main.httpPort, config.main.ip);
