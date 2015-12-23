@@ -2,7 +2,7 @@ var express = require('express');
 var force = require('express-force-domain');
 var redirServer = express();
 
-redirServer.use(force('https://pazari-vivliou.gr'));
+redirServer.use(force('https://' + config.domain));
 redirServer.all('*', function (req, res) {
 
     res.redirect("https://" + req.headers.host + req.url);
