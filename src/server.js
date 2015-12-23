@@ -23,49 +23,24 @@ global.appServer = new zx.Server({
 function onstart() {
 
     var server = this;
-    var jadeCache = {
-        "/": {
-            template: null,
-            data: {}
-        },
-        "/search": {
-            template: null,
-            data: {}
-        },
-        "/item": {
-            template: null,
-            data: {}
-        },
-        "/list": {
-            template: null,
-            data: {}
-        },
-        "/categories": {
-            template: null,
-            data: {}
-        },
-        "/privacy-policy": {
-            template: null,
-            data: {}
-        },
-        "/terms-of-service": {
-            template: null,
-            data: {}
-        },
-        "/about": {
-            template: null,
-            data: {}
-        },
-        "/cart": {
-            template: null,
-            data: {}
-        },
-        "/wishlist": {
-            template: null,
-            data: {}
-        }
+    var jadeCache = {}
+    
+    for(let item of [
+        "/",
+        "/search",
+        "/item",
+        "/list",
+        "/categories",
+        "/privacy-policy",
+        "/terms-of-service",
+        "/about",
+        "/cart",
+        "/wishlist"
+    ]) jadeCache[item] = {
+        template: null,
+        data: {}
     }
-
+        
     server.jadeCache = jadeCache;
     server.userCache = {
 
