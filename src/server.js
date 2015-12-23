@@ -1,4 +1,8 @@
-﻿'use strict';
+﻿/* global requestsLogFile */
+/* global config */
+/* global zx */
+/* global sessionStats */
+'use strict';
 
 var path = require('path');
 var force = require('express-force-domain');
@@ -78,9 +82,31 @@ function onstart() {
     });
 
     // Log request
-    this.Router.use('/*', function (req, res, next) {
+    this.Router.use('/*', (req, res, next) => {
 
-        zx.log("HTTPS:[" + req.headers['user-agent'] + "][" + req.connection.remoteAddress + "]@" + new Date().getTime() + ": " + req.originalUrl);
+        let ua = req.headers['user-agent'];
+        let ip = req.connection.remoteAddress;
+        let ts = new Date().getTime();
+        let path = req.originalUrl;
+        
+        let reqInfo = {
+            protocol: 'https',
+            path,
+            ua, 
+            ip,
+            ts
+        }
+        
+        sessionStats.httpsRequests++;
+        sessionStats.totalRequests++;
+        
+        !ua && sessionStats.noUA++;
+        /Googlebot/.test(ua) && sessionStats.googlebot++;
+        /facebook/.test(ua) && sessionStats.facebookbot++;
+        
+        requestsLogFile.write(JSON.stringify(reqInfo) + '\n');
+
+        zx.log("HTTPS:[" + ua + "][" + ip + "]@" + ts + ": " + path);
         next();
 
     });
@@ -117,6 +143,8 @@ function onstart() {
 
     // Proxy biblionet images
     this.Router.get('/images/**/*', function (req, res, next) {
+        
+        sessionStats.imageRequests++;
         
         var filepath = req.path.replace(/\?.*$/,'');
         var filename = filepath.match(/\/([a-z0-9\.\-]*)$/i,'')[1];

@@ -1,4 +1,8 @@
-﻿var zenx = require('zenx');
+﻿/* global zx */
+/* global config */
+'use strict';
+
+var zenx = require('zenx');
 var argvs = {};
 
 process.title = 'bs-cluster';
@@ -39,6 +43,7 @@ require('./src/utils/alias.js');
 require('./src/utils/bounce.js');
 require('./src/utils/getBooksByBnids.js');
 require('./src/utils/gen.js');
+require('./src/utils/logger.js');
 
 // Load SMTP transporter object
 require('./src/email/email.index.js');
