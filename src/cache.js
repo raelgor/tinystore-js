@@ -64,12 +64,15 @@ module.exports = function (server, jadeCache) {
         jadeCache["/search"].template = jadeCache["/search"].template || jade.compileFile(__dirname + '/../layouts/search.jade', {});
         jadeCache["/item"].template = jadeCache["/item"].template || jade.compileFile(__dirname + '/../layouts/item.jade', {});
         jadeCache["/list"].template = jadeCache["/list"].template || jade.compileFile(__dirname + '/../layouts/category.jade', {});
+        jadeCache["/list"].template = jadeCache["/list"].template || jade.compileFile(__dirname + '/../layouts/category.jade', {});
+        jadeCache["/cart"].template = jadeCache["/cart"].template || jade.compileFile(__dirname + '/../layouts/cart.jade', {});
 
         // Only template in cache
         jadeCache["/categories"].template = jadeCache["/categories"].template || jade.compileFile(__dirname + '/../layouts/allcategories.jade', {});
         jadeCache["/terms-of-service"].template = jadeCache["/terms-of-service"].template || jade.compileFile(__dirname + '/../layouts/static.tos.jade', {});
         jadeCache["/privacy-policy"].template = jadeCache["/privacy-policy"].template || jade.compileFile(__dirname + '/../layouts/static.privacy.jade', {});
         jadeCache["/about"].template = jadeCache["/about"].template || jade.compileFile(__dirname + '/../layouts/static.about.jade', {});
+        jadeCache["/wishlist"].template = jadeCache["/wishlist"].template || jade.compileFile(__dirname + '/../layouts/wishlist.jade', {});
 
         log("[/search]: " + Object.keys(jadeCache["/search"].data).length);
         log("[/item]: " + Object.keys(jadeCache["/item"].data).length);

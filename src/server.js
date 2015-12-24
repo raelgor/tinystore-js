@@ -1,14 +1,21 @@
-﻿var path = require('path');
+﻿/* global requestsLogFile */
+/* global config */
+/* global zx */
+/* global sessionStats */
+'use strict';
+
+var path = require('path');
 var force = require('express-force-domain');
 var express = require('express');
+var fs = require('fs');
 
 global.appServer = new zx.Server({
     "db_type": "mongodb",
-    "db_host": "mongodb://" + nw + ":27017/_eshop_bookstore",
+    "db_host": "mongodb://" + config.mongodb.ip + ":" + config.mongodb.port + "/" + config.mongodb.database,
     "db_user": "",
     "db_pass": "",
-    "bind": nw,
-    "port": "443",
+    "bind": config.main.ip,
+    "port": config.main.httpsPort,
     "https": true,
     "ws": true,
     "isBehindProxy": false,
@@ -20,41 +27,24 @@ global.appServer = new zx.Server({
 function onstart() {
 
     var server = this;
-    var jadeCache = {
-        "/": {
-            template: null,
-            data: {}
-        },
-        "/search": {
-            template: null,
-            data: {}
-        },
-        "/item": {
-            template: null,
-            data: {}
-        },
-        "/list": {
-            template: null,
-            data: {}
-        },
-        "/categories": {
-            template: null,
-            data: {}
-        },
-        "/privacy-policy": {
-            template: null,
-            data: {}
-        },
-        "/terms-of-service": {
-            template: null,
-            data: {}
-        },
-        "/about": {
-            template: null,
-            data: {}
-        }
+    var jadeCache = {}
+    
+    for(let item of [
+        "/",
+        "/search",
+        "/item",
+        "/list",
+        "/categories",
+        "/privacy-policy",
+        "/terms-of-service",
+        "/about",
+        "/cart",
+        "/wishlist"
+    ]) jadeCache[item] = {
+        template: null,
+        data: {}
     }
-
+        
     server.jadeCache = jadeCache;
     server.userCache = {
 
@@ -92,9 +82,31 @@ function onstart() {
     });
 
     // Log request
-    this.Router.use('/*', function (req, res, next) {
+    this.Router.use('/*', (req, res, next) => {
 
-        zx.log("HTTPS:[" + req.headers['user-agent'] + "][" + req.connection.remoteAddress + "]@" + new Date().getTime() + ": " + req.originalUrl);
+        let ua = req.headers['user-agent'];
+        let ip = req.connection.remoteAddress;
+        let ts = new Date().getTime();
+        let path = req.originalUrl;
+        
+        let reqInfo = {
+            protocol: 'https',
+            path,
+            ua, 
+            ip,
+            ts
+        }
+        
+        sessionStats.httpsRequests++;
+        sessionStats.totalRequests++;
+        
+        !ua && sessionStats.noUA++;
+        /Googlebot/.test(ua) && sessionStats.googlebot++;
+        /facebook/.test(ua) && sessionStats.facebookbot++;
+        
+        requestsLogFile.write(JSON.stringify(reqInfo) + '\n');
+
+        zx.log("HTTPS:[" + ua + "][" + ip + "]@" + ts + ": " + path);
         next();
 
     });
@@ -112,23 +124,15 @@ function onstart() {
     // API
     require('./api/api.index.js')(this);
 
-    // Search page
+    // Pages
     require('./pages/page.search.js')(this);
-
-    // Item page
     require('./pages/page.item.js')(this);
-
-    // Category page
     require('./pages/page.category.js')(this);
-
-    // All categories
     require('./pages/page.allCategories.js')(this);
-
-    // Static pages
     require('./pages/page.static.js')(this);
-
-    // Index page
+    require('./pages/page.cart.js')(this);
     require('./pages/page.index.js')(this);
+    require('./pages/page.wishlist.js')(this);
 
     // Always add cache control header
     this.Router.use(function (req, res, next) {
@@ -139,28 +143,46 @@ function onstart() {
 
     // Proxy biblionet images
     this.Router.get('/images/**/*', function (req, res, next) {
+        
+        sessionStats.imageRequests++;
+        
+        var filepath = req.path.replace(/\?.*$/,'');
+        var filename = filepath.match(/\/([a-z0-9\.\-]*)$/i,'')[1];
+        var cacheFilepath = path.resolve(__dirname, './../cache/' + filename)
+        
+        fs.stat('./../cache/' + filename, (err, stats) => {
+        
+            if(!err) { 
+                
+                let fileStream = fs.createReadStream(cacheFilepath);
+                fileStream.pipe(res);
+                
+            } else require('http').request({
+                hostname: 'www.biblionet.gr',
+                method: 'get',
+                path: filepath
+            }, function (imgRes) {
+                
+                var cacheStream = fs.createWriteStream(cacheFilepath);
+                
+                imgRes.pipe(res);
+                imgRes.pipe(cacheStream);
 
-        require('http').request({
-            hostname: 'biblionet.gr',
-            method: 'get',
-            path: req.path
-        }, function (imgRes) {
+                imgRes.on('error', function () {
 
-            imgRes.pipe(res);
+                    this.emit('end');
 
-            imgRes.on('error', function () {
+                });
 
-                this.emit('end');
+                imgRes.on('end', function () {
 
-            });
+                    this.destroy();
 
-            imgRes.on('end', function () {
+                });
 
-                this.destroy();
-
-            });
-
-        }).end();
+            }).end();
+            
+        });
 
     });
 

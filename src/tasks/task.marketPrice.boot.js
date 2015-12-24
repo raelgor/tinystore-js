@@ -2,6 +2,8 @@
 var numCpus = require('os').cpus().length;
 var cluster = require('cluster');
 
+process.title = 'bs-task-bootmaster';
+
 cluster.setupMaster({ exec: __dirname + '/task.marketPrice.js' })
 
 var reboots = 0;

@@ -1,8 +1,10 @@
 var queue = [];
 var working;
 var fs = require('fs');
-var log = function (msg) { process.send({ cmd: 'log', msg: msg }); };
+var log = function (msg, info) { process.send({ cmd: 'log', msg, info }); };
 var config = require('./../config.json');
+
+process.title = 'bs-smbuilder';
 
 var defaultIndex = '<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><sitemap><loc>https://' + config.domain + '/sitemaps/base.xml</loc></sitemap></sitemapindex>';
 
@@ -17,8 +19,6 @@ require('./utils/alias.js');
 log('sitemap indexFile loaded.');
 
 process.on('message', function (msg) {
-
-    //log('sitemap child_process obj received.');
 
     if(msg.cmd == 'queue') try {
         queue.push(JSON.parse(msg.msg));
@@ -91,7 +91,15 @@ function build() {
 
     }
     
-    log('sitemaps built in ' + (new Date().getTime() - d) + 'ms [added: ' + added + ', updated: ' + (queue.length - added) + ', total: ' + (indexFile.split('<sitemap>').length - 1) + ']');
+    log(
+        'sitemaps built in ' + (new Date().getTime() - d) + 
+        'ms [added: ' + added + 
+        ', updated: ' + (queue.length - added) + 
+        ', total: ' + (indexFile.split('<sitemap>').length - 1) + ']', {
+            added,
+            updated: (queue.length - added),
+            total: (indexFile.split('<sitemap>').length - 1)
+        });
     
     queue = [];
     working = 0;
@@ -123,7 +131,7 @@ function build() {
 
             added++;
 
-            indexFile += "<sitemap><loc>https://' + config.domain + '/sitemaps/"
+            indexFile += '<sitemap><loc>https://' + config.domain + '/sitemaps/'
                             + catObj.term.split('::').join('-') + '.xml' +
                             "</loc><lastmod>" + new Date().toJSON() + "</lastmod></sitemap>";
 

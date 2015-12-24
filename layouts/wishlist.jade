@@ -1,0 +1,15 @@
+﻿doctype html
+html(lang="el")
+	include head.jade
+	body
+		include main-nav.jade
+		.main-content-wrapper
+			.center-wrapper
+				include sidebars.jade
+				.listings
+					.container
+						.listing-category.wishlist-page-wrapper
+							h2.title Το Wishlist μου
+							each val in sres
+								include product.jade
+		include footer.jade

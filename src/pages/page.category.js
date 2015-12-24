@@ -93,7 +93,7 @@ function fn() {
 
             function cb(bookInfo) {
 
-                sres.push(bookInfo);
+                sres.push(bookInfo[1]);
 
                 if (++resolved == bookIDs.length) {
                     ITEMS_DONE = 1;
@@ -134,6 +134,15 @@ function fn() {
         function respond() {
 
             try {
+
+                var catDesc = cat.title && cat.title.split(/[<>]/).join('');
+
+                catDesc = String(catDesc);
+
+                catDesc = 'Θεματική ενότητα βιβλίων: ' + catDesc;
+
+                catDesc = cat.description || catDesc;
+
                 res.send(jadeCache["/list"].template({
                     baseUrl: 'https://pazari-vivliou.gr/',
                     udata: res._userData,
@@ -144,14 +153,14 @@ function fn() {
                         title: cat.title + " - Παζάρι Βιβλίου",
                         metaTitle: cat.title + " - Παζάρι Βιβλίου",
                         metaKeywords: "eshop shop bookstore online books Παζάρι Βιβλίου Το Online Βιβλιοπωλείο ebooks pazari vivliou παζάρι βιβλίου παζαρι βιβλιου βιβλιοπωλείο βιβλιοπωλειο",
-                        metaDescription: cat.title && cat.title.split(/[<>]/).join(''),
+                        metaDescription: catDesc,
                         metaOgImage: "https://pazari-vivliou.gr/ogimg.jpg",
                         metaOgSite_name: "Παζάρι Βιβλίου - Το Online Βιβλιοπωλείο",
                         metaOgUrl: "https://pazari-vivliou.gr/list/" + cat.bnid + '/' + alias(cat.title),
                         metaOgTitle: cat.title + " - Παζάρι Βιβλίου",
                         metaOgType: "website",
                         metaOgLocale: "el_GR",
-                        metaOgDescription: cat.title && cat.title.split(/[<>]/).join('')
+                        metaOgDescription: catDesc
                     },
                     pageline: {
                         curPage: pageRequested,

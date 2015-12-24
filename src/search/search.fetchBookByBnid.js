@@ -1,24 +1,29 @@
-global.fetchBookByBnid = function (bnid) {
+/* global scrapBookMeta */
+/* global getExtraInfo */
+/* global log */
+/* global appServer */
+'use strict';
 
-    var server = this;
-    var GOT_EXTRA_INFO;
-    var GOT_NORM_INFO;
-    var promiseBuffer = [];
+global.fetchBookByBnid = (bnid) => {
 
     log('fetchBookByBnid for ' + bnid + ' ...');
 
-    return new Promise(function (res, rej) {
+    let cache = appServer.jadeCache["/item"].data;
+    let db = appServer.db.collection('bnBooks');
 
+    return new Promise((resolve) => {
+        
+        let GOT_EXTRA_INFO;
+        let GOT_NORM_INFO;
+        let promiseBuffer = [];
+        
         if (isNaN(bnid)) {
 
             log('bnid is NaN. resolving...');
-            return res({});
+            return resolve([{ error: 'bnid is nan' }, null]);
 
         }
-
-        var cache = server.jadeCache["/item"].data;
-        var db = server.db.collection('bnBooks');
-
+        
         // Check if book is in cache
         if (bnid in cache) {
 
@@ -29,11 +34,7 @@ global.fetchBookByBnid = function (bnid) {
                 
                 log('fetchBookByBnid ' + bnid + ' is promise. pushing resolve fn in buffer...');
 
-                return cache[bnid].promiseBuffer.push(function () {
-
-                    return res(cache[bnid]);
-
-                });
+                return cache[bnid].promiseBuffer.push(() => resolve([null, cache[bnid]]));
 
             }
 
@@ -44,7 +45,7 @@ global.fetchBookByBnid = function (bnid) {
             // mongodb with this information
             cache[bnid].requests++;
 
-            return res(cache[bnid]);
+            return resolve([null, cache[bnid]]);
 
         }
 
@@ -55,12 +56,12 @@ global.fetchBookByBnid = function (bnid) {
         cache[bnid] = {
 
             isPromise: true,
-            promiseBuffer: promiseBuffer
+            promiseBuffer
 
         }
 
         // Check if book is in mongo
-        db.find({ bnid: bnid }).toArray(function (err, data) {
+        db.find({ bnid: bnid }).toArray((err, data) => {
 
             // Cache and return
             if (!err && data[0]) {
@@ -76,20 +77,21 @@ global.fetchBookByBnid = function (bnid) {
                 GOT_NORM_INFO = 1;
 
                 // If we never brought it or obsolete, fetch
-                if (!data[0].marketPriceTS || (parseInt(new Date().getTime() - (data[0].marketPriceTS)) > 1000 * 60 * 60 * 24 * 7)) {
+                if (!data[0].marketPriceTS || (new Date().getTime() - (data[0].marketPriceTS)) > 1000 * 60 * 60 * 24 * 7) {
 
                     // Get extra info and update
-                    getExtraInfo(data[0]).then(function (i) {
-                        i && i.bnid && db.update({ bnid: i.bnid }, i);
+                    getExtraInfo(data[0]).then((i) => {
+                        i && i.bnid && db.update({ bnid: i.bnid }, {
+                            $set: {
+                                marketPrice: i.marketPrice,
+                                marketPriceTS: i.marketPriceTS
+                            }
+                        });
                     });
 
-                    // Update availability
-                    scrapBookMeta(bnid).then(function (item) {
-
-                        if (!item) return;
-                        db.update({ bnid: bnid }, { unavail: item.unavail });
-
-                    });
+                    // Update availability (can only go from avail to unavail)
+                    scrapBookMeta(bnid).then((item) => 
+                        item && item.unavail && db.update({ bnid: bnid }, { unavail: item.unavail }))
 
                 }
 
@@ -100,7 +102,7 @@ global.fetchBookByBnid = function (bnid) {
             log('fetchBookByBnid ' + bnid + ' not found in mongo. calling scrapBookMeta...');
 
             // Check biblionet.gr
-            scrapBookMeta(bnid).then(cb, cb);
+            scrapBookMeta(bnid).then(cb);
 
             function cb(item) {
 
@@ -121,7 +123,12 @@ global.fetchBookByBnid = function (bnid) {
                     getExtraInfo(item).then(function (i) {
 
                         log('extra info fetched. updating mongo and resolving...');
-                        i && i.bnid && db.update({ bnid: i.bnid }, i);
+                        i && i.bnid && db.update({ bnid: i.bnid }, {
+                            $set: {
+                                marketPrice: i.marketPrice,
+                                marketPriceTS: i.marketPriceTS
+                            }
+                        });
 
                         // Timed out
                         if (GOT_EXTRA_INFO) return;
@@ -145,12 +152,12 @@ global.fetchBookByBnid = function (bnid) {
         });
 
         function part(item) {
-
+            
             if (GOT_NORM_INFO && GOT_EXTRA_INFO) {
 
                 // If other request came meanwhile, serve them too
                 promiseBuffer.forEach(function (fn) { return fn(); });
-                return res(item);
+                return resolve([null, item]);
 
             }
 
