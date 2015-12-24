@@ -10,3 +10,4 @@ daemons
 typings/*
 jsconfig.json
 .vscode
+gists/tmp/*
