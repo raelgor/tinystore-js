@@ -2,7 +2,7 @@
 
 Create a `config.json` file based on this file. Keep in mind that many things are still hardcoded.
 
-```json
+```js
 {
     // Wether or not to start ZenX Platform
     // @todo Add ZenX Platform server info settings
