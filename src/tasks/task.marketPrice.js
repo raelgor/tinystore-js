@@ -80,7 +80,7 @@ setInterval(function () {
 
         var req = http.request({
 
-            host: 'www.politeianet.gr',
+            host: config.fetcher.targetDomain,
             method: 'get',
             path: path,
             headers: {
@@ -89,7 +89,7 @@ setInterval(function () {
                 'Accept-Language': 'en,el;q=0.8',
                 'Cache-Control': 'no-cache',
                 'Connection': 'keep-alive',
-                'Host': 'www.politeianet.gr',
+                'Host': config.fetcher.targetDomain,
                 'Pragma': 'no-cache',
                 'Upgrade-Insecure-Requests': '1',
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36'

@@ -1,13 +1,19 @@
-﻿global.scrapBookMeta = function (bnid) {
+﻿/* global log */
+/* global alias */
+/* global scrapAuthorByBnid */
+/* global http *
+/* global config */
+
+global.scrapBookMeta = function (bnid) {
 
     log('scrapBookMeta for ' + bnid + '...');
 
-    return new Promise(function (resolve, rej) {
+    return new Promise(function (resolve) {
 
         var request = http.request({
-            hostname: "biblionet.gr",
+            hostname: config.dataSourceDomain,
             method: "GET",
-            path: "/book/" + bnid
+            path: "/main.asp?page=showbook&bookid=" + bnid//"/book/" + bnid
         }, function (res) {
 
             res.setEncoding('utf8');
@@ -72,6 +78,8 @@
                 try {
 
                     var _ = data.split(/\/author\//)[1];
+                    // @todo This works with the new(?) version of their site
+                    //var _ = data.match(/personsid\=([0-9]*)\>/)[1];
                     item.authorid = _ && _.split('/')[0];
 
                 } catch (x) { };
@@ -110,7 +118,7 @@
                 // Scrap isbn-13
                 try {
 
-                    var _ = data.split('ISBN-13')[1];
+                    var _ = data.split('ISBN-13 ')[1];
                     item.isbn13 = _ && _.split(/[,\, \[\<]/)[0].trim();
 
                 } catch (x) { };
