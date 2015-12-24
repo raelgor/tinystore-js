@@ -14,6 +14,7 @@ var https = require('https');
 var l = console.log;
 var initTime = process.hrtime();
 var totalBytes = 0;
+var pending = 0;
 
 require('colors');
 
@@ -21,28 +22,38 @@ require('./../src/utils/gen.js');
 
 var fs = require('fs');
 
-var get = (url) => { 
+var get = url => { 
     
     if(url[0] == '/') url = BASE_URL + url;
     
     let host = url.match(/^http[s]{0,1}\:\/\/([0-9a-z\.\-]+).*$/)[1];
     let path = url.match(/^http[s]{0,1}\:\/\/[0-9a-z\.\-]+(.*$)/)[1];
     
-    return new Promise((resolve) => https.request({
+    pending++;
+    
+    return new Promise((resolve) => { 
         
-        host,
-        path,
-        rejectUnauthorized: false,
-        method: 'GET'
+        let request = https.request({
+            
+            host,
+            path,
+            rejectUnauthorized: false,
+            method: 'GET'
+            
+        }, (response) => { 
+            
+            let data = '';
+            
+            response.on('data', (chunk) => data += chunk);
+            response.on('end', () => { pending--; resolve(data); }); 
+            
+        });
         
-    }, (response) => { 
+        request.end();
         
-        let data = '';
-        
-        response.on('data', (chunk) => data += chunk);
-        response.on('end', () => resolve(data)); 
-        
-    }).end()); 
+        request.on('socket', socket => socket.on('error', () => {}));
+    
+    }); 
 
 }
 
@@ -80,9 +91,9 @@ function* engine(){
     while(url = linkBuffer.shift())
         if(!(url in index)) {
             
-            let html = yield get(url);
-            
             index[url] = 1;
+            
+            let html = yield get(url);
             
             totalBytes += html.length;
             
@@ -101,6 +112,7 @@ setInterval(() =>
     process.stdout.write("\r\x1b[K" + [
         '',
         'INDEX:'.yellow    + Object.keys(index).length,
+        'PENDING:'.yellow   + pending,
         'BUFFER:'.yellow   + linkBuffer.length,
         'RSS:'.yellow      + Math.ceil(process.memoryUsage().rss/1024/1024) + 'M'.gray,
         'TIME:'.yellow     + process.hrtime(initTime)[0] + 's'.gray,
