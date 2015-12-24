@@ -33,7 +33,7 @@ function fn() {
             csrf: zx.newSession.call(server.auth),
             alias: alias,
             price: price,
-            browserKey: config.browserKey,
+            browserKey: config.googleBrowserKey,
             head: {
                 title: data[id].title + " - Παζάρι Βιβλίου",
                 metaTitle: data[id].title + " - Παζάρι Βιβλίου",
