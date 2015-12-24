@@ -1,4 +1,6 @@
-﻿var express = require('express');
+﻿/* global config */
+
+var express = require('express');
 var server = express();
 var entries = {}
 

@@ -1,4 +1,9 @@
-﻿var PAGE_SIZE = 24;
+﻿/* global price */
+/* global zx */
+/* global fetchBookByBnid */
+/* global searchCast */
+
+var PAGE_SIZE = 24;
 
 module.exports = function (server) {
 
@@ -20,7 +25,6 @@ function fn() {
         var hr = process.hrtime();
         var sres = [];
         var resNum = 0;
-        var reqID = q + "::" + pageRequested;
 
         // Exit if invalid search
         if (q.length < 2) return respond();
@@ -56,7 +60,7 @@ function fn() {
                     curPage: pageRequested,
                     action: "/search",
                     searchstring: q,
-                    totalPages: parseInt(resNum/PAGE_SIZE) + (resNum%PAGE_SIZE!=0?1:0)
+                    totalPages: Math.floor(resNum/PAGE_SIZE) + (resNum%PAGE_SIZE!=0?1:0)
                 },
                 resNum: resNum,
                 searchTerms: q,
