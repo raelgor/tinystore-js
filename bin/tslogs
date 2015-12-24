@@ -3,8 +3,8 @@
 process.title = 'bs-logs';
 
 const logFiles = {
-    'main': './../z.log',
-    'task': './../src/tasks/z.log'
+    'main': './../logs/main.log',
+    'task': './../logs/task.log'
 }
 
 var path = require('path');
