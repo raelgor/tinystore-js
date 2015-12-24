@@ -1,0 +1,124 @@
+#!/usr/bin/env node
+'use strict';
+
+process.title = 'bs-benchmark';
+
+const BASE_URL = 'https://pazari-vivliou.gr';
+const LINK_REGEX =  /\"(https\:\/\/pazari\-vivliou\.gr\/[0-9a-z\.\-\/]+|\/[0-9a-z\-\.\/]+)\"/;
+const NUM_OF_ENGINES = process.argv[2] || 1;
+
+var engines = NUM_OF_ENGINES;
+var index = {};
+var linkBuffer = [BASE_URL];
+var https = require('https');
+var l = console.log;
+var initTime = process.hrtime();
+var totalBytes = 0;
+var pending = 0;
+
+require('colors');
+
+require('./../src/utils/gen.js');
+
+var fs = require('fs');
+
+var get = url => { 
+    
+    if(url[0] == '/') url = BASE_URL + url;
+    
+    let host = url.match(/^http[s]{0,1}\:\/\/([0-9a-z\.\-]+).*$/)[1];
+    let path = url.match(/^http[s]{0,1}\:\/\/[0-9a-z\.\-]+(.*$)/)[1];
+    
+    pending++;
+    
+    return new Promise((resolve) => { 
+        
+        let request = https.request({
+            
+            host,
+            path,
+            rejectUnauthorized: false,
+            method: 'GET'
+            
+        }, (response) => { 
+            
+            let data = '';
+            
+            response.on('data', (chunk) => data += chunk);
+            response.on('end', () => { pending--; resolve(data); }); 
+            
+        });
+        
+        request.end();
+        
+        request.on('socket', socket => socket.on('error', () => {}));
+    
+    }); 
+
+}
+
+var getLinks = (html) => { 
+    
+    let links = []; 
+    let regex = LINK_REGEX; 
+    
+    let next = () => {
+        
+        var match = html.match(regex); 
+
+        match = match && match[1]; 
+
+        if(!match) 
+            return;
+            
+        html = html.replace(regex, ''); 
+        links.push(match);
+        
+        return true;
+        
+    }
+    
+    while(next());
+    
+    return links;  
+
+}
+
+function* engine(){
+    
+    var url;
+    
+    while(url = linkBuffer.shift())
+        if(!(url in index)) {
+            
+            index[url] = 1;
+            
+            let html = yield get(url);
+            
+            totalBytes += html.length;
+            
+            for(let link of getLinks(html))
+                if(!(link in index)) //&& !/\.(jpg|png|gif)$/.test(link))
+                    linkBuffer.push(link);
+                    
+        }
+        
+}
+
+while(engines) 
+    setTimeout(() => gen(engine), engines--*1e3);
+    
+setInterval(() =>
+    process.stdout.write("\r\x1b[K" + [
+        '',
+        'INDEX:'.yellow    + Object.keys(index).length,
+        'PENDING:'.yellow   + pending,
+        'BUFFER:'.yellow   + linkBuffer.length,
+        'RSS:'.yellow      + Math.ceil(process.memoryUsage().rss/1024/1024) + 'M'.gray,
+        'TIME:'.yellow     + process.hrtime(initTime)[0] + 's'.gray,
+        'RPS:'.yellow      + Math.floor(Object.keys(index).length/process.hrtime(initTime)[0]),
+        'ENGINES:'.yellow  + NUM_OF_ENGINES,
+        'BYTES:'.yellow    + Math.floor(totalBytes/1e3) + 'K'.gray,
+        ''
+    ].join('|'.cyan))
+,300);

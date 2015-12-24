@@ -12,6 +12,10 @@
 
         function resolve() {
 
+            var passed = bounce.check({ request: "login", username: "kosmas" });
+
+            if (!passed) return reject();
+
             // Find user in database
             server.db.collection('users').find({ email: String(formData.email) }).toArray(function (err, data) {
 
@@ -22,10 +26,20 @@
                 // If valid, make new session
                 if (valid_login) {
 
+                    var lists = {};
+
+                    try {
+
+                        lists = JSON.parse(formData.lists);
+
+                    } catch (err) { }
+
                     var newToken = new SessionToken();
                     var user = (server.userCache.users[data[0].uuid] && server.userCache.users[data[0].uuid].obj) || new User(data[0]);
 
                     uauth = newToken.token;
+
+                    user.addLists(lists);
 
                     if (user.tokens.length >= 10) {
 
@@ -44,7 +58,8 @@
                     user.tokens.push(newToken);
 
                     server.db.collection('users').update({ uuid: user.uuid }, {
-                        $push: { tokens: newToken }
+                        $push: { tokens: newToken },
+                        $set: { lists: lists }
                     });
 
                     if (!(user.uuid in server.userCache.users)) {

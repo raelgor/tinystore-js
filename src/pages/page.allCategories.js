@@ -11,7 +11,7 @@ function fn() {
 
     this.Router.get('/categories', function (req, res, next) {
 
-        res.setHeader("Cache-Control", "no-cache, must-revalidate");
+        res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 
         var id = req.path.split('/')[2];
         var sres = {};

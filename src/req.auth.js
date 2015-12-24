@@ -27,7 +27,17 @@ function fn() {
         var user;
 
         // Bind user data to the response object to use later
-        res._userData = {}
+        res._userData = {
+            shippingMinimum: config.shippingMinimum,
+            shippingCost: config.shippingCost,
+            tax: config.tax,
+            phone: config.phone,
+            phoneHours: config.phoneHours
+        }
+
+        // If the request has a token in query, maybe the user clicked
+        // on forgot password verification email
+        res._userData.fpasstoken = req.query.token;
 
         // If found, add data to _userData and update cache
         function found() {
@@ -38,12 +48,45 @@ function fn() {
             res._userData.verified = user.verified;
 
             res._userData.fbid = user.fbid;
-            res._userData.csrf = user.tokens.filter(function (e) { return e.token == String(req.cookies.uauth) })[0].csrf;
+            res._userData.csrf = user.tokens.filter(e => { return e.token == String(req.cookies.uauth) })[0].csrf;
 
-            res._userData.wishlist = user.wishlist;
-            res._userData.cart = user.cart;
+            res._userData.wl = {};
+            res._userData.cart = {};
 
-            next();
+            Promise.all([
+                getBooksByBnids(Object.keys(user.lists.wl)).then(function (data) {
+
+                    res._userData.wl = {};
+
+                    data.forEach(record => record && record.bnid &&
+                        (res._userData.wl[record.bnid] = {
+                            bnid: record.bnid,
+                            title: record.title,
+                            img: record.img || '/noimg.jpg',
+                            price: price(record),
+                            link: '/item/' + record.bnid + '/' + alias(record.title),
+                            quantity: user.lists.wl[record.bnid].quantity
+                        })
+                    );
+
+                }),
+                getBooksByBnids(Object.keys(user.lists.cart)).then(function (data) {
+
+                    res._userData.cart = {};
+
+                    data.forEach(record => record && record.bnid &&
+                        (res._userData.cart[record.bnid] = {
+                            bnid: record.bnid,
+                            title: record.title,
+                            img: record.img || '/noimg.jpg',
+                            price: price(record),
+                            link: '/item/' + record.bnid + '/' + alias(record.title),
+                            quantity: user.lists.cart[record.bnid].quantity
+                        })
+                    );
+
+                })
+            ]).then(()=>next());
 
         }
 

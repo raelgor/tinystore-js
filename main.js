@@ -1,18 +1,26 @@
-﻿var zenx = require('zenx');
+﻿/* global zx */
+/* global config */
+'use strict';
+
+var zenx = require('zenx');
 var argvs = {};
+
+process.title = 'bs-cluster';
 
 // Load commonly used modules
 global.http = require('http');
 global.https = require('https');
 
+global.config = require('./config.json');
+
 // Detect internal IP
-global.nw = require('os').networkInterfaces().eth0[0].address;
+global.nw = config.main.ip ||
+            require('os').networkInterfaces().eth0[0].address;
+
 zx.log('Default IP: ' + global.nw);
 
 // Index process arguments
 process.argv.forEach(function (key) { argvs[key] = 1; });
-
-global.config = require('./config.json');
 
 global.mongodb = require('mongodb');
 global.ObjectID = require('mongodb').ObjectID;
@@ -21,11 +29,24 @@ global.pwh = require('password-hash');
 
 global.querystring = require('querystring');
 
+// Load models
+require('./src/models/model.CacheObject.js');
+require('./src/models/model.SessionToken.js');
+require('./src/models/model.User.js');
+require('./src/models/model.MailOptions.js');
+
 // Load utils
 require('./src/utils/price.js');
 require('./src/utils/verifyCaptcha.js');
 require('./src/utils/log.js');
 require('./src/utils/alias.js');
+require('./src/utils/bounce.js');
+require('./src/utils/getBooksByBnids.js');
+require('./src/utils/gen.js');
+require('./src/utils/logger.js');
+
+// Load SMTP transporter object
+require('./src/email/email.index.js');
 
 // Load search scrappers
 require('./src/search/search.cast.js');

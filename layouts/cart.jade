@@ -1,0 +1,79 @@
+﻿doctype html
+html(lang="el")
+	include head.jade
+	body
+		include main-nav.jade
+		.main-content-wrapper
+			.center-wrapper
+				.listings
+					.container
+						.listing-category.cart-order-success(style="display:none;")
+							.order-thanks Η παραγγελία σας καταχωρήθηκε επιτυχώς!
+							.order-thanks-id
+								span Κωδικός παραγγελίας: 
+								span#order-id-socket
+							.order-thanks-text 
+								span Λάβαμε την παραγγελία σας και θα την εκτελέσουμε το συντομότερο δυνατόν. Για οποιαδήποτε πληροφορία καλέστε στο 
+								span#phone-socket
+						.listing-category.cart-checkout-wrapper
+							h2.title Καλάθι
+							div.cart-item-list
+								div.list-head
+									a Τίτλος
+									a Τεμάχια
+									a Τιμή
+							div.cart-list-final-price
+								div.send-cost
+									span Έξοδα αποστολής
+									a
+								div.final-price
+									span Σύνολο
+									a
+							h2.title Τρόπος πληρωμής
+							.payment-method-wrapper
+								.payment-method
+									.payment-title Αντικαταβολή
+									.payment-description Πληρωμή κατά την παραλαβή με τη Γενική Ταχυδρομική.
+								.payment-method.ghost
+									.payment-title Πιστωτική κάρτα
+									.payment-description Αυτή η μέθοδος δεν είναι διαθέσιμη ακόμα.
+							h2.title Στοιχεία και διεύθυνση αποστολής
+							form.order-form
+								.label Όνομα
+								.label-desc Το όνομά σας.
+								input._fn(type="text", name="firstname", required)
+								.label Επίθετο
+								.label-desc Το επίθετό σας.
+								input._ln(type="text", name="lastname", required)
+								.label Χώρα
+								.label-desc Η χώρα παραλαβής. Προς το παρόν εξυπηρετούμε παραγγελίες σε Ελλάδα και Κύπρο.
+								input._cn(type="text", value="Ελλάδα", name="country", required)
+								.label Πόλη
+								.label-desc Η πόλη παραλαβής.
+								input.ct(type="text", name="city", required)
+								.label Διεύθυνση
+								.label-desc Οδός, αριθμός και περιοχή (εάν χρειάζεται).
+								input.ad(type="text", name="address", required)
+								.label Ταχυδρομικός κώδικας
+								input.tk(type="text", name="zipcode", required)
+								.label Τηλέφωνο επικοινωνίας
+								.label-desc Το τηλέφωνο επικοινωνίας είναι απαραίτητο για να επικοινωνήσουμε μαζί σας εάν υπάρξει κάποιο πρόβλημα με την παραγγελία σας.
+								input.ph(type="text", name="phone", required)
+								.label Απόδειξη/Τιμολόγιο
+								.label-desc Συμπληρώστε τα παρακάτω πεδία εάν θέλετε έκδοση τιμολογίου, αλλιώς αφήστε τα κενά.
+								.label Α.Φ.Μ.
+								input.afm(type="text", name="afm")
+								.label Δ.Ο.Υ.
+								input.dou(type="text", name="dou")
+								.label Επάγγελμα/Ιδιότητα
+								input.prof(type="text", name="profession")
+								.agree-tos
+									input(type="checkbox", required)
+									span Επιβεβαιώνω ότι έχω διαβάσει και συμφωνώ με τους 
+									a(href="terms-of-service") όρους χρήσης
+									span και την
+									a(href="/privacy-policy") πολιτική προσωπικών δεδομένων.
+								#submit-order-rc.grecaptcha
+								.error
+								input(type="submit", value="Αποστολή παραγγελίας")
+		include footer.jade

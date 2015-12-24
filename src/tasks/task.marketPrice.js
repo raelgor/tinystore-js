@@ -1,6 +1,9 @@
 var http = require('http');
 var express = require('express');
+var config = require('./../../config.json');
 var server = express();
+
+process.title = 'bs-task-cluster';
 
 var requestBuffer = [];
 
@@ -16,11 +19,11 @@ server.get('/extra/**/*', function (req, res) {
 
         log('extra info for ' + isbn + ' got after ' + (new Date().getTime() - d) + ' (' + price + '). ' + requestBuffer.length + ' remaining...');
 
-        var req = http.request({
+        http.request({
 
-            host: '10.240.114.2',
+            host: config.main.ip,
             method: 'get',
-            port: 8965,
+            port: config.main.taskServerPort,
             path: '/extra/' + price + '/' + bnid
 
         }, function (response) {
@@ -33,7 +36,7 @@ server.get('/extra/**/*', function (req, res) {
 
 });
 
-http.createServer(server).listen(8965, '10.240.33.172');
+http.createServer(server).listen(config.fetcher.port, config.fetcher.ip);
 
 var log = function (str) {
 
@@ -77,7 +80,7 @@ setInterval(function () {
 
         var req = http.request({
 
-            host: 'www.politeianet.gr',
+            host: config.fetcher.targetDomain,
             method: 'get',
             path: path,
             headers: {
@@ -86,7 +89,7 @@ setInterval(function () {
                 'Accept-Language': 'en,el;q=0.8',
                 'Cache-Control': 'no-cache',
                 'Connection': 'keep-alive',
-                'Host': 'www.politeianet.gr',
+                'Host': config.fetcher.targetDomain,
                 'Pragma': 'no-cache',
                 'Upgrade-Insecure-Requests': '1',
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.157 Safari/537.36'

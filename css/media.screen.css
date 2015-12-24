@@ -1,6 +1,18 @@
+@media screen and (max-width: 1380px) {
+
+    .flags {
+        display: none !important;
+    }
+
+}
+
 @media screen and (max-width: 1100px){
     
-
+    
+    
+    .center-wrapper {
+        max-width: 100% !important;
+    }
     .login-status-text > div {
     color: gray !important;
 }
@@ -135,6 +147,7 @@
     .left-content {
         float:none!important;
         width: inherit!important;
+    max-width: inherit!important;
     }
 
     .item-title, .item-author, .social-wrapper {
@@ -147,9 +160,15 @@
     margin-left: 10px;
 }
 
+
 }
 
 @media screen and (max-width: 782px){
+
+    .nav > * {
+    position: relative;
+    top: 0px !important;
+}
 
     .footer-cat {
        vertical-align: top;

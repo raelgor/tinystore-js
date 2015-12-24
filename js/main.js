@@ -8,6 +8,7 @@
 if (_userData.clearLocalStorage) {
     localStorage.removeItem('wlData');
     localStorage.removeItem('cartData');
+    ga('send', 'event', 'site-action', 'clear-local-storage-from-server-logout');
 }
 
 window._NOT_TOUCH = 0;
@@ -53,6 +54,12 @@ $(document).ready(function () {
 
     app.onresize();
 
+    $('.cart-checkout-wrapper').length && submitOrderPage();
+
+    $('.cart-checkout-wrapper').length && window.cartPage();
+
+    $('.search-wrapper form').submit(function () { toast('Γίνεται αναζήτηση σε χιλιάδες βιβλία... Παρακαλούμε περιμένετε... :)'); });
+
     $('.search-wrapper input').focus(function () { $(this).select(); });
 
     if (!/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
@@ -70,12 +77,14 @@ $(document).ready(function () {
 
     }
 
-    $('.logout-btn').click(function (e) {
+    $('.lgt-click').click(function (e) {
 
         $.post('/api/logout', { csrf: _userData.csrf }, function (res) {
 
             localStorage.removeItem('wlData');
             localStorage.removeItem('cartData');
+
+            try { ga('send', 'event', 'site-action', 'logout-click'); } catch (err) { }
 
             window.location.reload();
 
@@ -88,6 +97,87 @@ $(document).ready(function () {
 
     });
 
+    $('.f-pass-reset-form').submit(function (e) {
+
+        e.preventDefault();
+
+        if (!grecaptcha.getResponse(window._fpassreset_rc)) {
+
+            $('.error').html('Παρακαλούμε επιβεβαιώστε ότι δεν είστε ρομπότ κάνοντας κλίκ στο παραπάνω κουτάκι.');
+
+            return false;
+
+        }
+
+        $.post('/api/fpassreset', {
+            password: String(CryptoJS.MD5($('.f-pass-reset-form [type="password"]').val())),
+            token: _userData.fpasstoken,
+            cp_key: grecaptcha.getResponse(window._fpassreset_rc)
+        }, function (res) {
+
+            try {
+
+                res = JSON.parse(res);
+                console.log(res);
+
+            } catch (err) { res = {} }
+
+            if (res.success) {
+
+                promptLogin();
+
+            } else {
+
+                grecaptcha.reset();
+                $('.error').html('Παρακαλούμε ελέγξτε τα στοιχεία που δώσατε και ξαναπροσπαθήστε.')
+
+            }
+
+        });
+
+    });
+
+    $('.f-pass-form').submit(function (e) {
+
+        e.preventDefault();
+
+        if (!grecaptcha.getResponse(window._fpass_rc)) {
+
+            $('.error').html('Παρακαλούμε επιβεβαιώστε ότι δεν είστε ρομπότ κάνοντας κλίκ στο παραπάνω κουτάκι.');
+
+            return false;
+
+        }
+
+        $.post('/api/fpass', {
+            email: $('.f-pass-form [type="email"]').val(),
+            cp_key: grecaptcha.getResponse(window._fpass_rc)
+        }, function (res) {
+
+            try {
+
+                res = JSON.parse(res);
+                console.log(res);
+
+            } catch (err) { res = {} }
+
+            if (res.success) {
+
+                $('.f-pass-form').html('');
+                $('.tab.f-pass .tab-head-tagline').html('Σας στείλαμε ένα email με οδηγίες ανάκτησης του κωδικού σας.');
+                $('.tab.f-pass .tab-head').html('Σχεδόν έτοιμοι!');
+
+            } else {
+
+                grecaptcha.reset();
+                $('.error').html('Παρακαλούμε ελέγξτε τα στοιχεία που δώσατε και ξαναπροσπαθήστε.')
+
+            }
+
+        });
+
+    });
+
     $('.login-form').submit(function (e) {
 
         e.preventDefault();
@@ -96,13 +186,14 @@ $(document).ready(function () {
 
             $('.error').html('Παρακαλούμε επιβεβαιώστε ότι δεν είστε ρομπότ κάνοντας κλίκ στο παραπάνω κουτάκι.');
 
-            return false;
+            return ga('send', 'event', 'site-action', 'login-form-error');
 
         }
 
         $.post('/api/login', {
             email: $('.login-form [type="email"]').val(),
             password: String(CryptoJS.MD5($('.login-form [type="password"]').val())),
+            lists: lists.toString,
             cp_key: grecaptcha.getResponse(window._login_rc)
         }, function (res) {
 
@@ -112,9 +203,18 @@ $(document).ready(function () {
 
             } catch (err) { res = {} }
 
-            if (res.success) window.location.reload(); else {
+            if (res.success) {
 
+                try { ga('send', 'event', 'site-action', 'login-success'); } catch (err) { }
+
+                window.location.reload();
+
+            } else {
+
+                grecaptcha.reset();
                 $('.error').html('Παρακαλούμε ελέγξτε τα στοιχεία που δώσατε και ξαναπροσπαθήστε.')
+
+                ga('send', 'event', 'site-action', 'login-error');
 
             }
 
@@ -130,13 +230,14 @@ $(document).ready(function () {
 
             $('.error').html('Παρακαλούμε επιβεβαιώστε ότι δεν είστε ρομπότ κάνοντας κλίκ στο παραπάνω κουτάκι.');
 
-            return false;
+            return ga('send', 'event', 'site-action', 'register-form-error');
 
         }
 
         $.post('/api/register', {
             email: $('.register-form [type="email"]').val(),
             password: String(CryptoJS.MD5($('.register-form [type="password"]').val())),
+            lists: lists.toString,
             cp_key: grecaptcha.getResponse(window._register_rc)
         }, function (res) {
 
@@ -146,11 +247,20 @@ $(document).ready(function () {
 
             } catch (err) { res = {} }
 
-            if (res.success) window.location.reload(); else {
+            if (res.success) {
 
-                if (res.error == 2) $('.error').html('Υπάρχει ήδη ένας χρήστης με αυτό το email.');
+                try { ga('send', 'event', 'site-action', 'register-success'); } catch (err) { }
+                window.location.reload();
+
+            } else {
+
+                grecaptcha.reset();
+
+                if (res.error == 2) return $('.error').html('Υπάρχει ήδη ένας χρήστης με αυτό το email.');
 
                 $('.error').html('Παρακαλούμε ελέγξτε τα στοιχεία που δώσατε και ξαναπροσπαθήστε.')
+
+                ga('send', 'event', 'site-action', 'register-error');
 
             }
 
@@ -158,7 +268,25 @@ $(document).ready(function () {
 
     });
 
+    window.FPASSRESET && setTimeout(promptResetPassword, 1000);
+
 });
+
+_userData.fpasstoken && (window.FPASSRESET = 1);
+
+function promptResetPassword() {
+
+    $('.fixed-windows > *, .fixed-windows > * > *').addClass('out');
+    $('.fixed-windows, .f-window, .f-window .tab.f-pass-reset').removeClass('out');
+
+    if (_NOT_TOUCH) $('.f-window .tab.f-pass-reset [type="password"]').focus();
+
+    if (isNaN(window._fpassreset_rc)) window._fpassreset_rc = grecaptcha.render('forgot-password-reset-rc', {
+        'sitekey': '6LcVDgwTAAAAAKH6x-F-CIg4AfX7Kic-rr5jBRNX',
+        'theme': 'light'
+    });
+
+}
 
 function promptLogin() {
 
@@ -167,10 +295,12 @@ function promptLogin() {
 
     if (_NOT_TOUCH) $('.f-window .tab.login [type="email"]').focus();
 
-    window._login_rc = !isNaN(window._login_rc) || grecaptcha.render('login-rc', {
+    if (isNaN(window._login_rc))  window._login_rc = grecaptcha.render('login-rc', {
         'sitekey': '6LcVDgwTAAAAAKH6x-F-CIg4AfX7Kic-rr5jBRNX',
         'theme': 'light'
     });
+
+    ga('send', 'event', 'site-action', 'prompt-login');
 
 }
 
@@ -181,10 +311,13 @@ function promptRegister() {
 
     if (_NOT_TOUCH) $('.f-window .tab.register [type="email"]').focus();
 
-    window._register_rc = !isNaN(window._register_rc) || grecaptcha.render('register-rc', {
+
+    if (isNaN(window._register_rc)) window._register_rc = grecaptcha.render('register-rc', {
         'sitekey': '6LcVDgwTAAAAAKH6x-F-CIg4AfX7Kic-rr5jBRNX',
         'theme': 'light'
     });
+
+    ga('send', 'event', 'site-action', 'prompt-register');
 
 }
 
@@ -196,20 +329,14 @@ function promptFPass() {
 
     if (_NOT_TOUCH) $('.f-window .tab.f-pass [name="email"]').focus();
 
-    window._fpass_rc = !isNaN(window._fpass_rc) || grecaptcha.render('forgot-password-rc', {
+    if (isNaN(window._fpass_rc)) window._fpass_rc = grecaptcha.render('forgot-password-rc', {
         'sitekey': '6LcVDgwTAAAAAKH6x-F-CIg4AfX7Kic-rr5jBRNX',
         'theme': 'light'
     });
 
+    ga('send', 'event', 'site-action', 'prompt-fpass');
+
 }
-
-$(window).click(function (e) {
-    
-    var tar = $(e.target);
-
-    if (tar.is('.fixed-windows')) tar.addClass('out');
-
-});
 
 $(window).bind("touchend", function (e) {
 
@@ -234,6 +361,8 @@ function fbLogin() {
 
             fbAuth(accessToken);
 
+            ga('send', 'event', 'site-action', 'fb-auth');
+
         }
 
     }, { scope: 'public_profile,email' });
@@ -244,8 +373,7 @@ function fbAuth(accessToken) {
 
     $.post('/api/fbauth', {
         accessToken: accessToken,
-        cart: localStorage.cartData,
-        wl: localStorage.wlData
+        lists: lists.toString
     }).done(function (res) {
 
         JSON.parse(res).success && window.location.reload();
@@ -255,5 +383,12 @@ function fbAuth(accessToken) {
 }
 
 function rccb() {
+
+    if (!_userData.uuid && $('.wishlist-page-wrapper, .cart-checkout-wrapper').length) setTimeout(promptLogin, 1000);
+
+    $('.cart-checkout-wrapper').length && (window._submit_order_rc = grecaptcha.render('submit-order-rc', {
+        'sitekey': '6LcVDgwTAAAAAKH6x-F-CIg4AfX7Kic-rr5jBRNX',
+        'theme': 'light'
+    }));
 
 }

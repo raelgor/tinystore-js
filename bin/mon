@@ -1,0 +1,3 @@
+#!/bin/sh
+
+htop -p `pgrep bs-* | tr \"\\\\n\" \",\" | sed 's/,$//'`

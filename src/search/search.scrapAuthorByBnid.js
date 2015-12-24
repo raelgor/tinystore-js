@@ -2,14 +2,14 @@
 
     var bnid = item.authorid;
 
-    return new Promise(function (resolve, rej) {
+    return new Promise(function (resolve) {
 
         var http = require('http');
 
         var request = http.request({
-            hostname: "biblionet.gr",
+            hostname: config.dataSourceDomain,
             method: "GET",
-            path: "/author/" + bnid
+            path: "/main.asp?page=showauthor&personsid=" + bnid //"/author/" + bnid
         }, function (res) {
 
             res.setEncoding('utf8');

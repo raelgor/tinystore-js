@@ -7,7 +7,7 @@
         var http = require('http');
 
         var request = http.request({
-            hostname: "biblionet.gr",
+            hostname: config.dataSourceDomain,
             method: "GET",
             path: url,
             headers: {

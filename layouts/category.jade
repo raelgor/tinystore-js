@@ -12,6 +12,13 @@ html(lang="el")
 							h2.title=cat.title 
 								if resNum != 0
 									span=" (" + resNum + ")"
+							.social-wrapper
+								.fb-like(data-href="https://pazari-vivliou.gr/list/"+ cat.bnid + '/' +alias(cat.title), data-layout="button_count", data-action="like", data-show-faces="true", data-share="true")
+								a.twitter-share-button(data-url="https://pazari-vivliou.gr/list/"+cat.bnid+'/'+alias(cat.title), href="https://twitter.com/share", data-via="PazariVivliouGR", data-related="PazariVivliouGR")
+								a(href="//www.pinterest.com/pin/create/button/?url=" + (encodeURIComponent("https://pazari-vivliou.gr/list/" + cat.bnid + '/' + alias(cat.title))) + "&media=" + (encodeURIComponent(head.metaOgImage)) + "&description=" + encodeURIComponent(head.metaDescription), data-pin-do="buttonPin", data-pin-config="beside", data-pin-color="white")
+									img(src="//assets.pinterest.com/images/pidgets/pinit_fg_en_rect_white_20.png")
+								.g-plusone(data-size="medium" data-href="https://pazari-vivliou.gr/list/"+ cat.bnid + '/' +alias(cat.title))
+							p.cat-desc=head.metaDescription
 							if(cat.contents && cat.contents.length)
 								.total-results Υποκατηγορίες: 
 							each val in cat.contents

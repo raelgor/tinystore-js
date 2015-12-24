@@ -1,4 +1,9 @@
-﻿var PAGE_SIZE = 24;
+﻿/* global price */
+/* global zx */
+/* global fetchBookByBnid */
+/* global searchCast */
+
+var PAGE_SIZE = 24;
 
 module.exports = function (server) {
 
@@ -13,14 +18,13 @@ function fn() {
 
     this.Router.get('/search', function (req, res, next) {
 
-        res.setHeader("Cache-Control", "no-cache, must-revalidate");
+        res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
 
         var q = String(req.query.q).split('-').join('').trim().substring(0, 50).trim();
         var pageRequested = parseInt(String(req.query.p).split('.')[0]) || 1;
         var hr = process.hrtime();
         var sres = [];
         var resNum = 0;
-        var reqID = q + "::" + pageRequested;
 
         // Exit if invalid search
         if (q.length < 2) return respond();
@@ -56,7 +60,7 @@ function fn() {
                     curPage: pageRequested,
                     action: "/search",
                     searchstring: q,
-                    totalPages: parseInt(resNum/PAGE_SIZE) + (resNum%PAGE_SIZE!=0?1:0)
+                    totalPages: Math.floor(resNum/PAGE_SIZE) + (resNum%PAGE_SIZE!=0?1:0)
                 },
                 resNum: resNum,
                 searchTerms: q,
@@ -85,7 +89,7 @@ function fn() {
 
             function cb(bookInfo) {
 
-                sres.push(bookInfo);
+                sres.push(bookInfo[1]);
 
                 if (++resolved == bookIDs.length) respond();
 

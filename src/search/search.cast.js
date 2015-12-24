@@ -1,9 +1,8 @@
+/* global getBooksFromUrl */
 var CACHE_SEARCH_TIME = 1000 * 60 * 60 * 12;
 var PAGE_SIZE = 24;
 
 var addToCache = function (key, pool, obj) {
-
-    var cacheObj = [];
 
     log('caching ' + key + ' ...');
 
@@ -13,9 +12,10 @@ var addToCache = function (key, pool, obj) {
 
 global.searchCast = function (options) {
     
+    var server = appServer; 
+    
     log('search.cast ' + JSON.stringify(options) + ' ...');
 
-    var server = this;
     var jadeCache = server.jadeCache;
     var promiseBuffer = [];
 
@@ -155,11 +155,16 @@ global.searchCast = function (options) {
                         !RENEW && server.db.collection('bnSearchCache').insert(searchObj);
 
                         if (RENEW) {
-
-                            // might be unncessary
-                            server.db.collection('bnSearchCache').update({ term: reqID }, { $set: searchObj }, { upsert: 1 });
+                            
+                            if(!searchObj.bnIDs.length)
+                                server.db.collection('bnSearchCache').update({ term: reqID }, { $set: { lastTS: searchObj.lastTS } }, { upsert: 1 });
+                            else                  
+                                server.db.collection('bnSearchCache').update({ term: reqID }, { $set: searchObj }, { upsert: 1 });
 
                         }
+                        
+                        if(RENEW && !searchObj.bnIDs.length)
+                            log('RENEW flag was up but no BNIDs received. aborting update...');
 
                         global.sitemap.addSearch.call(server, searchObj);
 
