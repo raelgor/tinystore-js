@@ -62,6 +62,9 @@ Create a `config.json` file based on this file. Keep in mind that many things ar
         "key": "my-big-long-key-1234"
     },
     
+    // Google browser key for Maps
+    "googleBrowserKey": "my-big-long-browser-key",
+    
     // Content info
     // @todo These should be in a database. Lol
     "orderInfoEmail": "order-log-email@gmail.com", // Address to send  orders to.
