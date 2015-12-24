@@ -18,3 +18,6 @@ Live: https://pazari-vivliou.gr
 **TODO**
 - Remove hardcoded stuff and link to `config.json` and db entries
 - Update and enable ZenX Platform CMS
+- Add `mkdrip` and use it to create `./logs/*` and `./cache`
+- Create default data
+- Remove useless assets
