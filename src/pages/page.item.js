@@ -17,6 +17,8 @@ function fn() {
         var id = req.path.split('/')[2];
         var sres = {};
         var rel = [];
+        
+        if(isNaN(id)) return res.end();
 
         fetchBookByBnid.call(server, id).then(cb, cb);
 
@@ -38,7 +40,7 @@ function fn() {
 
             function cb(bookInfo) {
 
-                rel.push(bookInfo);
+                rel.push(bookInfo[1]);
 
                 if (++resolved == bookIDs.length) respond();
 
@@ -48,7 +50,7 @@ function fn() {
 
         function cb(item) {
 
-            sres = item;
+            item = sres = item[1];
 
             if (item.categories.length) {
 

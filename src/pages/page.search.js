@@ -89,7 +89,7 @@ function fn() {
 
             function cb(bookInfo) {
 
-                sres.push(bookInfo);
+                sres.push(bookInfo[1]);
 
                 if (++resolved == bookIDs.length) respond();
 

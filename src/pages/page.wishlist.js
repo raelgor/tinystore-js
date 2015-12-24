@@ -16,7 +16,7 @@ function fn() {
 
         var user = server.userCache.users[_userData.uuid] && server.userCache.users[_userData.uuid].obj;
 
-        if (user && user.lists.wl) getBooksByBnids(Object.keys(user.lists.wl)).then(data => { for (var i in data) data[i] && sres.push(data[i]); resolve(); });
+        if (user && user.lists.wl) getBooksByBnids(Object.keys(user.lists.wl)).then(data => { for (var i in data) data[i][1] && sres.push(data[i][1]); resolve(); });
         else resolve();
 
         function resolve() {
