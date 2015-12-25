@@ -67,7 +67,8 @@ Create a `config.json` file based on this file. Keep in mind that many things ar
     
     // Content info
     // @todo These should be in a database. Lol
-    "orderInfoEmail": "order-log-email@gmail.com", // Address to send  orders to.
+    // Address to send  orders to
+    "orderInfoEmail": "order-log-email@gmail.com", 
     "phone": "+30 696 9696 966",
     "phoneHours": "Δευτέρα - Σάββατο 9 π.μ. - 9 μ.μ.",
     "protocol": "https",
