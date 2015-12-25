@@ -2,7 +2,7 @@
 
 Create a `config.json` file based on this file. Keep in mind that many things are still hardcoded.
 
-```json
+```js
 {
     // Wether or not to start ZenX Platform
     // @todo Add ZenX Platform server info settings
@@ -13,7 +13,7 @@ Create a `config.json` file based on this file. Keep in mind that many things ar
     
     // Default meta data
     "defaultKeywords": "very cool website",
-    "defaultMetaDesc": "This is a cools website.",
+    "defaultMetaDesc": "This is a cool website.",
 
     // Default domain name
     "domain": "your-service.com",
@@ -29,7 +29,7 @@ Create a `config.json` file based on this file. Keep in mind that many things ar
         "user": "contact@your-service.com"
     },
     
-    // Mongodb info.
+    // Mongodb info
     // @todo Support authentication
     "mongodb": {
         "ip": "127.0.0.1",
@@ -62,9 +62,13 @@ Create a `config.json` file based on this file. Keep in mind that many things ar
         "key": "my-big-long-key-1234"
     },
     
+    // Google browser key for Maps
+    "googleBrowserKey": "my-big-long-browser-key",
+    
     // Content info
     // @todo These should be in a database. Lol
-    "orderInfoEmail": "order-log-email@gmail.com", // Address to send  orders to.
+    // Address to send  orders to
+    "orderInfoEmail": "order-log-email@gmail.com", 
     "phone": "+30 696 9696 966",
     "phoneHours": "Δευτέρα - Σάββατο 9 π.μ. - 9 μ.μ.",
     "protocol": "https",

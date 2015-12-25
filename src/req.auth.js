@@ -58,7 +58,7 @@ function fn() {
 
                     res._userData.wl = {};
 
-                    data.forEach(record => record && record.bnid &&
+                    data.forEach(record => record && (record = record[1]) && record.bnid &&
                         (res._userData.wl[record.bnid] = {
                             bnid: record.bnid,
                             title: record.title,
@@ -74,7 +74,7 @@ function fn() {
 
                     res._userData.cart = {};
 
-                    data.forEach(record => record && record.bnid &&
+                    data.forEach(record => record && (record = record[1]) && record.bnid &&
                         (res._userData.cart[record.bnid] = {
                             bnid: record.bnid,
                             title: record.title,

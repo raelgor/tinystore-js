@@ -3,9 +3,18 @@
 'use strict';
 
 var zenx = require('zenx');
+var mkdirp = require('mkdirp');
 var argvs = {};
 
 process.title = 'bs-cluster';
+
+// Make sure temp and log dirs exist
+mkdirp('./cache');
+mkdirp('./logs/debug');
+mkdirp('./logs/errors');
+mkdirp('./logs/events');
+mkdirp('./logs/requests');
+mkdirp('./logs/sessionStats');
 
 // Load commonly used modules
 global.http = require('http');
