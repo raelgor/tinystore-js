@@ -13,7 +13,7 @@ Create a `config.json` file based on this file. Keep in mind that many things ar
     
     // Default meta data
     "defaultKeywords": "very cool website",
-    "defaultMetaDesc": "This is a cools website.",
+    "defaultMetaDesc": "This is a cool website.",
 
     // Default domain name
     "domain": "your-service.com",
@@ -29,7 +29,7 @@ Create a `config.json` file based on this file. Keep in mind that many things ar
         "user": "contact@your-service.com"
     },
     
-    // Mongodb info.
+    // Mongodb info
     // @todo Support authentication
     "mongodb": {
         "ip": "127.0.0.1",
