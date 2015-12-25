@@ -10,10 +10,37 @@ const logFiles = {
 var path = require('path');
 var fs = require('fs');
 var GrowingFile = require('growing-file');
+
+// @todo Remove if this gets merged https://github.com/felixge/node-growing-file/pull/7
+
+GrowingFile.open = function(path, options) {
+  var file = new this();
+
+  options = options || {};
+  ['timeout', 'interval']
+    .forEach(function(option) {
+      if (option in options) {
+        var property = '_' + option;
+        file[property] = options[option];
+      }
+    });
+
+  file._path = path;
+  
+  if(options.startFromEnd)
+    file._offset = fs.statSync(path).size;
+  
+  file._readUntilEof();
+
+  return file;
+};
+
+
 var filename = path.resolve(__dirname, logFiles[process.argv[2] || 'main']);
 var file = GrowingFile.open(filename, {
     timeout: 6*1e7,
-    interval: 500
+    interval: 500,
+    startFromEnd: true
 });
 
 file.pipe(process.stdout);
