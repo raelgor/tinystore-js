@@ -6,7 +6,7 @@ ssl/*
 *.psd
 *.tif
 *.tgz
-daemons
+daemons/*
 typings/*
 jsconfig.json
 .vscode
