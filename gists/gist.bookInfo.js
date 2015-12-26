@@ -2,7 +2,7 @@
 'use strict';
 
 const NUM_OF_ENGINES = 2;
-const START = 90680;
+const START = 175248;
 
 require('./../src/utils/alias');
 require('./../src/utils/gen');
@@ -115,6 +115,7 @@ setInterval(() =>
         '',
         'SCRAPPED:'.yellow + saved,
         'BNID:'.yellow     + i,
+        'RSS:'.yellow      + Math.ceil(process.memoryUsage().rss/1024/1024) + 'M'.gray,
         'ENGINES:'.yellow  + NUM_OF_ENGINES,
         ''
     ].join('|'.cyan))

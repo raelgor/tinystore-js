@@ -1,10 +1,7 @@
 {
-  "name": "bookstore",
-  "version": "0.0.1",
-  "main": "main.js",
-  "bin": {
-    "bs": "./bin/bin.js"
-  },
+  "name": "tinystore-js",
+  "version": "0.1.0",
+  "main": "boot.js",
   "dependencies": {
     "body-parser": "^1.13.3",
     "colors": "^1.1.2",
