@@ -149,7 +149,8 @@ global.searchCast = function (options) {
                         };
 
                         // Add search in cache
-                        addToCache(reqID, jadeCache["/search"].data, bookIDs);
+                        // @todo Update this so that false data will not falsely update cache
+                        // addToCache(reqID, jadeCache["/search"].data, bookIDs);
 
                         log('search.cast cb insert...');
                         !RENEW && server.db.collection('bnSearchCache').insert(searchObj);
