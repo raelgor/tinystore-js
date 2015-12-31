@@ -150,8 +150,8 @@ function onstart() {
         var filename = filepath.match(/\/([a-z0-9\.\-]*)$/i,'')[1];
         var cacheFilepath = path.resolve(__dirname, './../cache/' + filename)
         
-        fs.stat('./../cache/' + filename, (err, stats) => {
-        
+        fs.stat(cacheFilepath, (err, stats) => {
+            
             if(!err) { 
                 
                 let fileStream = fs.createReadStream(cacheFilepath);
