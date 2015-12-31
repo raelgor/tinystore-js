@@ -166,7 +166,9 @@ function onstart() {
                 var cacheStream = fs.createWriteStream(cacheFilepath);
                 
                 imgRes.pipe(res);
-                imgRes.pipe(cacheStream);
+                
+                // @todo Investigate
+                // imgRes.pipe(cacheStream);
 
                 imgRes.on('error', function () {
 
