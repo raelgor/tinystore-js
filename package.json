@@ -4,6 +4,7 @@
   "main": "boot.js",
   "dependencies": {
     "body-parser": "^1.13.3",
+    "co": "^4.6.0",
     "colors": "^1.1.2",
     "express": "^4.13.1",
     "express-force-domain": "0.0.6",
@@ -12,6 +13,7 @@
     "htmlparser": "^1.7.7",
     "mkdirp": "^0.5.1",
     "mongodb": "^2.0.42",
+    "mz": "^2.1.0",
     "nodemailer": "^1.4.0",
     "password-hash": "^1.2.2",
     "soupselect": "^0.2.0",
