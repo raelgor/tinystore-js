@@ -11,3 +11,4 @@ typings/*
 jsconfig.json
 .vscode
 gists/tmp/*
+cache/*
