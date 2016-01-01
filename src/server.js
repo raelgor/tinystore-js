@@ -148,28 +148,54 @@ function onstart() {
         
         var filepath = req.path.replace(/\?.*$/,'');
         var filename = filepath.match(/\/([a-z0-9\.\-]*)$/i,'')[1];
-        var cacheFilepath = path.resolve(__dirname, './../cache/' + filename)
+        var cacheFilepath = path.resolve(__dirname, './../cache/' + filename);
+        
+        // @patch Simultaneous requests
+        // @todo Make cleaner
+        var imgReqIndex = global.imgReqIndex = global.imgReqIndex || {};
+        
+        if(cacheFilepath in imgReqIndex)
+            return imgReqIndex[cacheFilepath].res.push(res);
+            
+        imgReqIndex[cacheFilepath] = { res: [res] };
         
         fs.stat(cacheFilepath, (err, stats) => {
             
             if(!err) { 
                 
                 let fileStream = fs.createReadStream(cacheFilepath);
-                fileStream.pipe(res);
+                
+                for(let res of imgReqIndex[cacheFilepath].res)
+                    fileStream.pipe(res);
+                    
+                delete imgReqIndex[cacheFilepath];
                 
             } else require('http').request({
-                hostname: 'www.biblionet.gr',
+                hostname: config.dataSourceDomain,
                 method: 'get',
                 path: filepath
             }, function (imgRes) {
                 
-                var cacheStream = fs.createWriteStream(cacheFilepath);
+                if(~imgRes.headers['content-type'].indexOf('image') && imgRes.statusCode === 200){
+                    
+                    let cacheStream = fs.createWriteStream(cacheFilepath);
+                    
+                    for(let res of imgReqIndex[cacheFilepath].res)
+                        imgRes.pipe(res);
+                        
+                    delete imgReqIndex[cacheFilepath];
+                        
+                    imgRes.pipe(cacheStream);
                 
-                imgRes.pipe(res);
+                } else {
                 
-                // @todo Investigate
-                // imgRes.pipe(cacheStream);
-
+                    for(let res of imgReqIndex[cacheFilepath].res)
+                        res.redirect('https://' + config.domain + '/noimg.jpg');
+                    
+                    delete imgReqIndex[cacheFilepath];
+                
+                }
+                    
                 imgRes.on('error', function () {
 
                     this.emit('end');
