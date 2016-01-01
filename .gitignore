@@ -12,3 +12,4 @@ jsconfig.json
 .vscode
 gists/tmp/*
 cache/*
+gists/*.dat
