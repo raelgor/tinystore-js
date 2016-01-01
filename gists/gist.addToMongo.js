@@ -3,7 +3,6 @@
 
 var inserted = 0;
 var invalid = 0;
-var current = '0';
 var upsertFailed = 0;
 var total = 0;
 var dataAvail = {};
@@ -30,7 +29,7 @@ var init = (err, db) => {
             json = JSON.parse(json.toString('utf8'));
             
             for(let key in json)
-                dataAvail[key] = dataAvail[key] ? dataAvail[key]++ : 1;
+                dataAvail[key] = dataAvail[key] ? ++dataAvail[key] : 1;
             
             yield new Promise(resolve => collection.update(
                 { bnid: json.bnid }, 
