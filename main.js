@@ -20,6 +20,7 @@ mkdirp('./logs/sessionStats');
 global.http = require('http');
 global.https = require('https');
 global.socks = require('socks');
+global.fs = require('fs');
 
 global.config = require('./config.json');
 
