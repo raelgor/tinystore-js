@@ -31,6 +31,15 @@ global.tor = config.tor.useTor && (function(options, secretary) {
  
     socks.createConnection(reqOpts, function(err, socket, info) {
 
+        if(err || !socket) {
+            
+            for(let response of queue)
+                response.redirect('https://' + config.domain + '/noimg.jpg');
+                
+            return;
+            
+        }
+        
         socket.write("GET " + options.filepath + " HTTP/1.1\nHost: " + config.dataSourceDomain + "\n\n");
         
         var first = true;
@@ -49,8 +58,19 @@ global.tor = config.tor.useTor && (function(options, secretary) {
                 if(!~tmp.indexOf('200 OK') || !~tmp.indexOf('image/'))
                     for(let response of queue)
                         response.redirect('https://' + config.domain + '/noimg.jpg');
-                else
-                    queue.push(require('fs').createWriteStream(options.cacheFilepath));
+                else {
+                
+                    socket.pause();
+                    fs.stat(options.cacheFilepath, (err, stat) => {
+                
+                        if(err)        
+                            queue.push(fs.createWriteStream(options.cacheFilepath));
+                        
+                        socket.resume();
+                        
+                    });
+                
+                }
                 
             }
             
@@ -75,10 +95,6 @@ global.tor = config.tor.useTor && (function(options, secretary) {
             
         }, 6e4);
         
-        if(err)
-            for(let response of queue)
-                response.redirect('https://' + config.domain + '/noimg.jpg');
-            
         socket.resume();
             
     });
