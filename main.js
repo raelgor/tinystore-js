@@ -19,6 +19,7 @@ mkdirp('./logs/sessionStats');
 // Load commonly used modules
 global.http = require('http');
 global.https = require('https');
+global.socks = require('socks');
 
 global.config = require('./config.json');
 
@@ -53,6 +54,7 @@ require('./src/utils/bounce.js');
 require('./src/utils/getBooksByBnids.js');
 require('./src/utils/gen.js');
 require('./src/utils/logger.js');
+require('./src/utils/tor.js');
 
 // Load SMTP transporter object
 require('./src/email/email.index.js');

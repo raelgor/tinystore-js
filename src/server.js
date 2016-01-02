@@ -170,7 +170,9 @@ function onstart() {
                     
                 delete imgReqIndex[cacheFilepath];
                 
-            } else require('http').request({
+            } else if(global.tor)
+                global.tor({filepath, imgReqIndex, cacheFilepath});
+            else require('http').request({
                 hostname: config.dataSourceDomain,
                 method: 'get',
                 path: filepath

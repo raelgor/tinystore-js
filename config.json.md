@@ -57,6 +57,15 @@ Create a `config.json` file based on this file. Keep in mind that many things ar
         "port": 8966
     },
     
+    // Tor is used if a proxy is installed
+    "tor": {
+        // Leave this false unless you know
+        // what you're doing
+        "useTor": false,
+        "ipaddress": "127.0.0.1",
+        "port": 9050
+    },
+
     // Google recaptcha key
     "grecaptcha": {
         "key": "my-big-long-key-1234"

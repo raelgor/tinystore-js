@@ -16,6 +16,7 @@
     "mz": "^2.1.0",
     "nodemailer": "^1.4.0",
     "password-hash": "^1.2.2",
+    "socks": "^1.1.8",
     "soupselect": "^0.2.0",
     "zenx": "0.0.35"
   }
