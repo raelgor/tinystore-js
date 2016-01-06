@@ -2,7 +2,7 @@
 'use strict';
 
 const NUM_OF_ENGINES = 2;
-const START = 0;
+const START = 38167;
 const SCRAP_TYPE = 'persons';
 const DB_PATH = 'mongodb://127.0.0.1:27017/general_purpose';
 
