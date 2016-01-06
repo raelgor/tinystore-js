@@ -41,32 +41,32 @@ global.pwh = require('password-hash');
 global.querystring = require('querystring');
 
 // Load models
-require('./src/models/model.CacheObject.js');
-require('./src/models/model.SessionToken.js');
-require('./src/models/model.User.js');
-require('./src/models/model.MailOptions.js');
+require('./src/models/model.CacheObject');
+require('./src/models/model.SessionToken');
+require('./src/models/model.User');
+require('./src/models/model.MailOptions');
 
 // Load utils
-require('./src/utils/price.js');
-require('./src/utils/verifyCaptcha.js');
-require('./src/utils/log.js');
-require('./src/utils/alias.js');
-require('./src/utils/bounce.js');
-require('./src/utils/getBooksByBnids.js');
-require('./src/utils/gen.js');
-require('./src/utils/logger.js');
-require('./src/utils/tor.js');
+require('./src/utils/price');
+require('./src/utils/verifyCaptcha');
+require('./src/utils/log');
+require('./src/utils/alias');
+require('./src/utils/bounce');
+require('./src/utils/getBooksByBnids');
+require('./src/utils/gen');
+require('./src/utils/logger');
+require('./src/utils/tor');
 
 // Load SMTP transporter object
-require('./src/email/email.index.js');
+require('./src/email/email.index');
 
 // Load search scrappers
-require('./src/search/search.cast.js');
-require('./src/search/search.fetchBookByBnid.js');
-require('./src/search/search.getBooksFromUrl.js');
-require('./src/search/search.getExtraInfo.js');
-require('./src/search/search.scrapAuthorByBnid.js');
-require('./src/search/search.scrapBookMeta.js');
+require('./src/search/search.cast');
+require('./src/search/search.fetchBookByBnid');
+require('./src/search/search.getBooksFromUrl');
+require('./src/search/search.getExtraInfo');
+require('./src/search/search.scrapAuthorByBnid');
+require('./src/search/search.scrapBookMeta');
 
 // reCAPTCHA key
 global.RCP_KEY = config.grecaptcha.key;
@@ -78,13 +78,13 @@ global.FB = require('fb');
 global._debug = "--debug" in argvs;
 
 // Sitemap generator
-global.sitemap = require('./src/sitemap.js');
+global.sitemap = require('./src/sitemap');
 
 // Redirect server on :80
-require('./src/redirect.js');
+require('./src/redirect');
 
 // App server on :443
-require('./src/server.js');
+require('./src/server');
 
 // CMS server on :10000
-require('./src/cms.js');
+require('./src/cms');
