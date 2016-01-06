@@ -55,7 +55,7 @@ global.tor = config.tor.useTor && (function(options, secretary) {
                 
                 let tmp = c.toString('utf8');
                 
-                if(!~tmp.indexOf('200 OK') || !~tmp.indexOf('image/'))
+                if(!-~tmp.indexOf('200 OK') || !-~tmp.indexOf('image/'))
                     for(let response of queue)
                         response.redirect('https://' + config.domain + '/noimg.jpg');
                 else {

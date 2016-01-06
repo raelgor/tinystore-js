@@ -62,7 +62,7 @@ co(function*() {
                     
                     let downloading;
                     
-                    if(~response.headers['content-type'].indexOf('image') && response.statusCode === 200){
+                    if(-~response.headers['content-type'].indexOf('image') && response.statusCode === 200){
                         
                         downloading = true;
                         

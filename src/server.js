@@ -178,7 +178,7 @@ function onstart() {
                 path: filepath
             }, function (imgRes) {
                 
-                if(~imgRes.headers['content-type'].indexOf('image') && imgRes.statusCode === 200){
+                if(-~imgRes.headers['content-type'].indexOf('image') && imgRes.statusCode === 200){
                     
                     let cacheStream = fs.createWriteStream(cacheFilepath);
                     
