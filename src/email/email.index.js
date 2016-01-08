@@ -27,7 +27,7 @@ email.sendVerificationEmail = function (to, token) {
     });
 
     // Send mail with defined transport object
-    email.sendMail(options, function () { console.log(arguments); });
+    email.sendMail(options, function () {  });
 
 }
 
@@ -41,7 +41,7 @@ email.sendForgotPasswordEmail = function (to, token) {
     });
 
     // Send mail with defined transport object
-    email.sendMail(options, function () { console.log(arguments); });
+    email.sendMail(options, function () {  });
 
 }
 
@@ -61,7 +61,7 @@ email.sendOrderInfoEmail = function (to, order) {
     });
 
     // Send mail with defined transport object
-    email.sendMail(options, function () { console.log(arguments); });
+    email.sendMail(options, function () {  });
 
 }
 
@@ -80,6 +80,6 @@ email.sendOrderInfoEmailToClient = function (to, order) {
     });
 
     // Send mail with defined transport object
-    email.sendMail(options, function () { console.log(arguments); });
+    email.sendMail(options, function () {  });
 
 }
