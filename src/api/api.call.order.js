@@ -1,4 +1,5 @@
-﻿module.exports = function (server) {
+﻿'use strict';
+module.exports = function (server) {
 
     return function (req, res, next) {
 
@@ -25,11 +26,12 @@
                 if (!user.verified) return res.send('{}');
 
                 getBooksByBnids(Object.keys(lists.cart)).then(function (data) {
-
+                    
                     var cart = [];
                     var cprice = 0;
 
-                    data.forEach(e => {
+                    data.forEach(bookRes => {
+                        let e = bookRes && bookRes[1];
                         if (e && price(e) && !e.unavail) {
                             e.qtt = lists.cart[e.bnid] && lists.cart[e.bnid].quantity;
                             cart.push(e);
